@@ -1,4 +1,6 @@
-User-agent: *
-Allow: /
+# Cloudflare prepends its managed content-signals block (which already carries
+# "User-agent: * / Allow: /" plus the AI-crawler rules) ahead of this file, so
+# repeating a second "User-agent: *" group here would only muddy the parse.
+# The sitemap line is group-independent and is the one thing worth adding.
 
 Sitemap: https://bushel.sh/sitemap.xml
