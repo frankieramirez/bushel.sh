@@ -9,11 +9,11 @@
  */
 import ExternalArrow from "./ExternalArrow.astro";
 import { isDocsPath } from "../lib/docs";
-import { latestVersion } from "../lib/version";
+import { bushelDocs } from "../lib/bushelDocs";
 
 const REPO = "https://github.com/frankieramirez/bushel";
 
-const version = await latestVersion();
+const { version } = await bushelDocs();
 const path = Astro.url.pathname;
 const atHome = path === "/" || path === "";
 const inDocs = isDocsPath(path);

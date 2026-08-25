@@ -1,0 +1,95 @@
+---
+/**
+ * The config reference, rendered from the release's `docs.json`.
+ *
+ * bushel derives that file from two places at once — keys and defaults from
+ * `Config::default()`, flags and help text from clap's `Args` — and fails its
+ * own build when the two disagree, which is what lets this page print a table
+ * nobody maintains. The TOML block below is generated from the same options,
+ * so it cannot list a key the table does not.
+ *
+ * Decided in https://github.com/frankieramirez/bushel/issues/47
+ */
+import Docs from "../../layouts/Docs.astro";
+import { bushelDocs } from "../../lib/bushelDocs";
+
+const { version, config } = await bushelDocs();
+
+/** TOML for the defaults, in the order bushel declares its flags. */
+const example = config.options
+  .map((option) => `${option.key} = ${JSON.stringify(option.default)}`)
+  .join("\n");
+
+const headings = [
+  { depth: 2, slug: "options", text: "Options" },
+  { depth: 2, slug: "flags-and-the-file", text: "Flags and the file" },
+];
+---
+
+<Docs
+  title="Config"
+  description="bushel's config file options, their defaults, and the flags that set the same things."
+  lede="Three switches, a file that holds them, and the flags that set the same things."
+  headings={headings}
+>
+  <p>
+    bushel reads <code>{config.path}</code>, which holds exactly what the flags
+    can also set. The file is optional and every key below is optional inside it.
+    This page is generated from bushel v{version}, so the defaults are the ones
+    the binary actually starts with.
+  </p>
+
+  <p>Writing out the defaults gives you a file that changes nothing:</p>
+
+  <pre><code>{example}</code></pre>
+
+  <h2 id="options">Options</h2>
+
+  <div class="docs-scroll">
+    <table class="docs-table">
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Flag</th>
+          <th>Default</th>
+          <th>Does</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          config.options.map((option) => (
+            <tr>
+              <td>
+                <code>{option.key}</code>
+              </td>
+              <td>
+                <code>{option.flag}</code>
+              </td>
+              <td>
+                <code>{JSON.stringify(option.default)}</code>
+              </td>
+              <td>{option.desc}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="flags-and-the-file">Flags and the file</h2>
+
+  <p>
+    A flag can only switch something on. bushel ORs each flag with the file's
+    value, so <code>reduced_motion = true</code> in the file stays on whatever
+    you pass on the command line, and turning it back off means editing the file.
+  </p>
+
+  <p>
+    A key bushel does not recognise is ignored in silence, so a misspelling like
+    <code>reduce_motion</code> produces no warning and no effect. A value of the
+    wrong type is louder: bushel prints one line naming the file and falls back
+    to defaults for all of it.
+    <a href="/docs/troubleshooting#settings-that-do-nothing">Troubleshooting</a>
+    has both.
+  </p>
+</Docs>

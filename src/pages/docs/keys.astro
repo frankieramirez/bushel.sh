@@ -1,0 +1,88 @@
+---
+/**
+ * The keymap, rendered from the release's `docs.json` rather than typed out
+ * here. bushel's cheatsheet is the source, so this page cannot drift the way
+ * the README's hand-copied keymap did — it had lost four bindings by the time
+ * the docs site was charted.
+ *
+ * Decided in https://github.com/frankieramirez/bushel/issues/47
+ */
+import Docs from "../../layouts/Docs.astro";
+import { bushelDocs } from "../../lib/bushelDocs";
+
+const { version, keymap } = await bushelDocs();
+
+/** Group names are already `global` / `list` / `detail`; slugged defensively. */
+const slug = (group: string) =>
+  group
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+const headings = keymap.map((g) => ({
+  depth: 2,
+  slug: slug(g.group),
+  text: g.group,
+}));
+---
+
+<Docs
+  title="Keys"
+  description="Every key binding bushel answers, generated from its own cheatsheet."
+  lede="Every binding bushel answers, in the groups its own cheatsheet uses."
+  headings={headings}
+>
+  <p>
+    Press <code>?</code> inside bushel for this same list without leaving the terminal,
+    and <code>esc</code> or <code>q</code> to close it again. Neither key appears
+    below, because the cheatsheet does not list the keys that open and close it.
+    Everything else does. This page is generated from bushel v{version}, from the
+    cheatsheet the overlay draws, so the two cannot disagree.
+  </p>
+
+  {
+    keymap.map((group) => (
+      <>
+        <h2 id={slug(group.group)}>{group.group}</h2>
+        <div class="docs-scroll">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Keys</th>
+                <th>Does</th>
+              </tr>
+            </thead>
+            <tbody>
+              {group.bindings.map((binding) => (
+                <tr>
+                  <td>
+                    <code>{binding.keys}</code>
+                  </td>
+                  <td>{binding.desc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    ))
+  }
+
+  <p>
+    The groups name what a binding acts on, and not a mode you have to be in.
+    <code>j</code>/<code>k</code> and <code>g</code>/<code>G</code> move the
+    selection while the list is focused, then scroll the detail pane once
+    <code>enter</code> has moved focus there. <code>l</code> and <code>i</code>
+    switch the detail tab without leaving the list, though they need the
+    containers pane; <code>F</code> also needs the Logs tab whose follow it
+    toggles.
+  </p>
+
+  <p>
+    What genuinely needs the list focused is <code>/</code>, <code>enter</code>,
+    <code>space</code> and the action letters. Those letters are filtered to what
+    the selection can actually do, so one that appears inert usually means the
+    action does not apply here. <a href="/docs/troubleshooting">Troubleshooting</a>
+    covers the rest of what can look broken.
+  </p>
+</Docs>

@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "version": "0.3.1",
+  "keymap": [
+    {
+      "group": "global",
+      "bindings": [
+        {
+          "keys": "1/2/3, tab",
+          "desc": "expand pane (containers / images / volumes)"
+        },
+        {
+          "keys": "f",
+          "desc": "zoom focused side"
+        },
+        {
+          "keys": "m",
+          "desc": "message log"
+        },
+        {
+          "keys": "b",
+          "desc": "dismiss version banner"
+        },
+        {
+          "keys": "q",
+          "desc": "quit"
+        }
+      ]
+    },
+    {
+      "group": "list",
+      "bindings": [
+        {
+          "keys": "j/k g/G",
+          "desc": "move / top / bottom"
+        },
+        {
+          "keys": "/",
+          "desc": "fuzzy filter (esc clears)"
+        },
+        {
+          "keys": "enter",
+          "desc": "focus detail pane"
+        },
+        {
+          "keys": "space",
+          "desc": "action menu"
+        },
+        {
+          "keys": "s r K d P e",
+          "desc": "start/stop · restart · kill · delete · prune · exec"
+        },
+        {
+          "keys": "u",
+          "desc": "pull image (images pane)"
+        }
+      ]
+    },
+    {
+      "group": "detail",
+      "bindings": [
+        {
+          "keys": "l / i",
+          "desc": "logs / inspect tab (containers)"
+        },
+        {
+          "keys": "F",
+          "desc": "toggle follow"
+        },
+        {
+          "keys": "w",
+          "desc": "toggle wrap / truncated"
+        },
+        {
+          "keys": "pgup/pgdn",
+          "desc": "scroll without switching focus"
+        },
+        {
+          "keys": "esc",
+          "desc": "back to list"
+        }
+      ]
+    }
+  ],
+  "config": {
+    "path": "~/.config/bushel/config.toml",
+    "options": [
+      {
+        "key": "no_splash",
+        "flag": "--no-splash",
+        "default": false,
+        "desc": "Skip the splash screen"
+      },
+      {
+        "key": "reduced_motion",
+        "flag": "--reduced-motion",
+        "default": false,
+        "desc": "Disable all animation and effects"
+      },
+      {
+        "key": "ascii",
+        "flag": "--ascii",
+        "default": false,
+        "desc": "ASCII icons and spinners (no Unicode glyphs)"
+      }
+    ]
+  }
+}

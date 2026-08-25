@@ -1333,6 +1333,15 @@ button {
   padding-right: 0;
 }
 
+/*
+ * A key name or a flag is one token. Left to wrap it splits as `--no-` /
+ * `splash`, which reads like two flags; the `.docs-scroll` wrapper is there to
+ * take the width instead.
+ */
+.docs-table code {
+  white-space: nowrap;
+}
+
 /* Wrap a wide table in this on an .astro page; Markdown tables get the
    narrow-screen fallback below, which needs no wrapper. */
 .docs-scroll {
@@ -1340,8 +1349,23 @@ button {
   scrollbar-width: thin;
 }
 
+/*
+ * Below this the columns get squeezed until the last one is a couple of
+ * characters wide, which is worse than scrolling. On a wide screen the 100%
+ * above wins and this never applies.
+ */
+.docs-scroll .docs-table {
+  min-width: 36rem;
+}
+
+/*
+ * A Markdown table has nowhere to hang a wrapper, so on a narrow screen it
+ * becomes its own scroll container. `.docs-table` is excluded: it already sits
+ * in `.docs-scroll`, and applying both would leave its prose column unable to
+ * wrap for no gain.
+ */
 @media (max-width: 599px) {
-  .prose table {
+  .prose table:not(.docs-table) {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
