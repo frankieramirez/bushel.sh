@@ -3,8 +3,10 @@
  * releases API so every deploy prints the truth; falls back to the constant
  * below when the API is unreachable or rate-limited in CI.
  *
- * Cloudflare Pages only rebuilds on a push to this repo, so cutting a bushel
- * release does not refresh this on its own — redeploy the site to pick it up.
+ * Cloudflare Pages only rebuilds on a push to this repo, so this used to go
+ * stale on every bushel release. The bushel release workflow now POSTs a Pages
+ * deploy hook after announcing, which rebuilds the site and re-resolves this —
+ * see .github/workflows/deploy-site.yml on frankieramirez/bushel.
  */
 const FALLBACK = "0.3.1";
 
