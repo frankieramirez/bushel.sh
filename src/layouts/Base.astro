@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { normalisePath } from "../lib/url";
 
 interface Props {
   title: string;
@@ -7,7 +8,10 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://bushel.sh");
+const canonical = new URL(
+  normalisePath(Astro.url.pathname),
+  Astro.site ?? "https://bushel.sh",
+);
 const ogImage = new URL("/og.png", Astro.site ?? "https://bushel.sh");
 
 const jsonLd = {

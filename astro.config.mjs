@@ -20,6 +20,15 @@ function docsLayout() {
 // Static output (the default) — no adapter; Cloudflare Pages serves `dist`.
 export default defineConfig({
   site: "https://bushel.sh",
+
+  /*
+   * Extensionless URLs with no trailing slash: `dist/docs.html` served at
+   * `/docs`. Astro's default emits `dist/docs/index.html`, which Pages answers
+   * with a 308 to `/docs/` — so the nav, the sitemap and the canonical tag all
+   * pointed at a URL that redirected. One shape, agreed on everywhere.
+   */
+  build: { format: "file" },
+  trailingSlash: "never",
   markdown: {
     remarkPlugins: [docsLayout],
     // bushel's own terminal palette is github-dark derived (src/ui/theme.rs),

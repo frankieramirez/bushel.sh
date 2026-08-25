@@ -9,6 +9,8 @@
  * Scope for the docs site was settled in
  * https://github.com/frankieramirez/bushel/issues/42
  */
+import { normalisePath } from "./url";
+
 export interface DocsPage {
   /** Plate number, printed in the sidebar and on the page header. */
   no: string;
@@ -58,15 +60,6 @@ export const DOCS_PAGES: DocsPage[] = [
     summary: "Why a TUI for Apple Containers, and why it is shaped this way.",
   },
 ];
-
-/**
- * Astro hands us `/docs/keys/` in one place and `/docs/keys` in another
- * depending on `build.format` and the dev server, so compare on a normalised
- * form rather than trusting either.
- */
-export function normalisePath(pathname: string): string {
-  return pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
-}
 
 export function currentDocsPage(pathname: string): DocsPage | undefined {
   const path = normalisePath(pathname);

@@ -5,7 +5,8 @@
  * under the masthead on a phone. Both are the same markup — see `.docs-nav`
  * in global.css — so a screen reader is never offered the links twice.
  */
-import { DOCS_PAGES, normalisePath } from "../lib/docs";
+import { DOCS_PAGES } from "../lib/docs";
+import { normalisePath } from "../lib/url";
 
 const path = normalisePath(Astro.url.pathname);
 ---

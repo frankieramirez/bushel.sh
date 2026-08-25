@@ -1,0 +1,46 @@
+---
+/**
+ * Cloudflare Pages serves `dist/404.html` for any path it cannot match, and
+ * without one it falls back to the landing page with a 200 — so every mistyped
+ * URL looked like a real page to both readers and crawlers. Harmless while the
+ * site was a single page; not harmless now that there are docs URLs to get
+ * wrong. Astro builds this route to 404.html on its own.
+ */
+import Base from "../layouts/Base.astro";
+import Masthead from "../components/Masthead.astro";
+import Colophon from "../components/Colophon.astro";
+import { DOCS_PAGES } from "../lib/docs";
+---
+
+<Base
+  title="Nothing in this crate — bushel"
+  description="That page does not exist on bushel.sh."
+>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <Masthead />
+
+  <main id="main" class="notfound">
+    <div class="wrap">
+      <p class="fig">
+        <span class="fig-no">Fig. 404</span>
+        <span class="fig-name">Not found</span>
+      </p>
+
+      <h1 class="notfound-title">Nothing in this crate</h1>
+
+      <p class="notfound-lede">
+        That page does not exist. The link may be wrong, or it may have moved.
+      </p>
+
+      <div class="rule"></div>
+
+      <nav class="notfound-links" aria-label="Go to">
+        <a href="/">Home</a>
+        {DOCS_PAGES.map((page) => <a href={page.href}>{page.title}</a>)}
+      </nav>
+    </div>
+  </main>
+
+  <Colophon />
+</Base>
