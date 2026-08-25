@@ -162,28 +162,18 @@ That swaps every icon and spinner for ASCII. Colours looking flat is a separate
 thing: bushel only uses the full 24-bit palette when `COLORTERM` contains
 `truecolor` or `24bit`, and steps down to the 256-colour palette otherwise.
 
-### bushel crashes when the terminal is short
+### The terminal is smaller than the layout wants
 
-```
-thread 'main' panicked at src/ui/layout.rs:216:10:
-min > max. min = 6, max = 2
-```
+At 22 rows or fewer, or 60 columns or fewer, the header shrinks to one row while
+the table headers, the detail tab row, the status cluster and the `l`/`i` jumps
+in the action menu all drop away to buy back space. Narrower than 80 columns,
+the rail stacks above the detail pane rather than sitting beside it.
 
-Fixed, but not in a release yet: the fix landed after v0.3.1, so every published
-build still has it ([#52](https://github.com/frankieramirez/bushel/issues/52)).
-Below 12 rows the stacked layout tries to reserve more height for the rail than
-the frame has, and the clamp inverts. It needs both conditions at
-once: fewer than 12 rows **and** fewer than 80 columns, because at 80 columns or
-wider the rail sits beside the detail pane instead of above it.
-
-Resizing to 12 rows or taller clears it, as does widening to 80 columns at any
-height. Upgrading will too, once the next release is out.
-
-Do not confuse that panic with the floor layout, which is designed. At 22 rows
-or fewer, or 60 columns or fewer, the header shrinks to one row while the table
-headers, the detail tab row, the status cluster and the `l`/`i` jumps in the
-action menu all drop away to buy back space. Narrower than 80 columns, the rail
-stacks above the detail pane rather than sitting beside it.
+Smaller again and bushel still draws. The rail and the detail pane split
+whatever rows are left, and once the rail is down to fewer than three rows the
+collapsed panes give way so the active one keeps them. Versions before 0.3.2 panicked here
+instead ([#52](https://github.com/frankieramirez/bushel/issues/52)), so upgrade
+if you see `min > max` in a crash.
 
 ### Motion is distracting, or the terminal cannot keep up
 
