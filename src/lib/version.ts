@@ -10,7 +10,18 @@
  */
 const FALLBACK = "0.3.1";
 
-export async function latestVersion(): Promise<string> {
+/**
+ * Resolved once per build, not once per page. The masthead is on every route,
+ * and a static build renders them all in one process, so without this the docs
+ * section would spend a network round-trip per page to learn the same tag.
+ */
+let inFlight: Promise<string> | null = null;
+
+export function latestVersion(): Promise<string> {
+  return (inFlight ??= resolve());
+}
+
+async function resolve(): Promise<string> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
 

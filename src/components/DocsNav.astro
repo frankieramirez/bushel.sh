@@ -1,0 +1,34 @@
+---
+/**
+ * The docs contents list. One element, two shapes: a sticky numbered column
+ * beside the prose on a wide screen, a horizontally scrolling label ribbon
+ * under the masthead on a phone. Both are the same markup — see `.docs-nav`
+ * in global.css — so a screen reader is never offered the links twice.
+ */
+import { DOCS_PAGES, normalisePath } from "../lib/docs";
+
+const path = normalisePath(Astro.url.pathname);
+---
+
+<nav class="docs-nav" aria-label="Docs">
+  <p class="stencil docs-nav-label">Contents</p>
+  <ol class="docs-nav-list">
+    {
+      DOCS_PAGES.map((page) => {
+        const current = page.href === path;
+        return (
+          <li>
+            <a
+              href={page.href}
+              title={page.summary}
+              aria-current={current ? "page" : undefined}
+            >
+              <span class="docs-nav-no">{page.no}</span>
+              <span class="docs-nav-title">{page.title}</span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>

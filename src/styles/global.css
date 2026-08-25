@@ -336,6 +336,30 @@ button {
   white-space: nowrap;
 }
 
+.masthead-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+/*
+ * The one link that never collapses. Everything else in the masthead folds to
+ * the GitHub glyph on a phone, but a reader on a narrow landing page still
+ * needs a door into the docs.
+ */
+.masthead-docs {
+  color: var(--cream);
+}
+
+.masthead-docs[aria-current] {
+  color: var(--amber);
+}
+
+.masthead-docs:hover,
+.masthead-docs:focus-visible {
+  color: var(--amber);
+}
+
 .masthead-links {
   display: flex;
   gap: 22px;
@@ -946,4 +970,423 @@ button {
   line-height: 1.7;
   color: var(--cream-3);
   text-transform: uppercase;
+}
+
+/* ── docs — the shell the six pages hang off ───────────────────────────── */
+
+/*
+ * Two columns, and a third for the table of contents only when the page
+ * actually produced one — an empty track would leave a gutter hanging off the
+ * right of every page without headings.
+ */
+.docs-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding-block: 0 clamp(46px, 5vw, 78px);
+}
+
+@media (min-width: 1000px) {
+  .docs-grid {
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: clamp(38px, 4vw, 60px);
+    padding-block: clamp(32px, 3.2vw, 48px) clamp(56px, 5.6vw, 88px);
+  }
+}
+
+@media (min-width: 1260px) {
+  .docs-grid:has(.docs-toc) {
+    grid-template-columns: 190px minmax(0, 1fr) 186px;
+  }
+}
+
+/* ── contents: a label ribbon on a phone, a numbered column on a desk ──── */
+
+.docs-nav {
+  border-bottom: 1px solid var(--keyline);
+}
+
+.docs-nav-label {
+  display: none;
+}
+
+.docs-nav-list {
+  list-style: none;
+  margin: 0 -14px;
+  padding: 0;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.docs-nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+.docs-nav-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 13px 14px 12px;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cream-2);
+  border-bottom: 2px solid transparent;
+}
+
+.docs-nav-list a:hover,
+.docs-nav-list a:focus-visible {
+  color: var(--amber);
+}
+
+.docs-nav-list a[aria-current="page"] {
+  color: var(--cream);
+  border-bottom-color: var(--amber);
+}
+
+.docs-nav-no {
+  font-size: 10px;
+  color: var(--amber);
+}
+
+@media (min-width: 1000px) {
+  .docs-nav {
+    border-bottom: 0;
+    position: sticky;
+    top: 30px;
+    align-self: start;
+  }
+
+  .docs-nav-label {
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .docs-nav-list {
+    flex-direction: column;
+    margin: 0;
+    overflow: visible;
+    border-left: 1px solid var(--keyline);
+  }
+
+  .docs-nav-list a {
+    padding: 8px 0 8px 14px;
+    margin-left: -1px;
+    white-space: normal;
+    border-bottom: 0;
+    border-left: 2px solid transparent;
+    letter-spacing: 0.14em;
+  }
+
+  .docs-nav-list a[aria-current="page"] {
+    border-left-color: var(--amber);
+  }
+}
+
+/* ── the page head ─────────────────────────────────────────────────────── */
+
+.docs-main {
+  padding-top: clamp(28px, 3.4vw, 44px);
+}
+
+/* the head and the prose share one measure, so their rules line up */
+.docs-head,
+.prose {
+  max-width: 72ch;
+}
+
+@media (min-width: 1000px) {
+  .docs-main {
+    padding-top: 0;
+  }
+}
+
+.docs-title {
+  margin-top: clamp(14px, 1.4vw, 20px);
+  font-family: var(--display);
+  font-size: clamp(1.875rem, 1.24rem + 2vw, 2.75rem);
+  line-height: 1.07;
+  letter-spacing: 0.005em;
+  color: var(--cream);
+}
+
+.docs-lede {
+  margin-top: clamp(12px, 1.2vw, 18px);
+  max-width: 62ch;
+  font-size: clamp(0.97rem, 0.9rem + 0.2vw, 1.063rem);
+  line-height: 1.64;
+  color: var(--cream-2);
+}
+
+.docs-head .rule {
+  margin-top: clamp(22px, 2.4vw, 34px);
+}
+
+/* ── prose ─────────────────────────────────────────────────────────────── */
+
+.prose {
+  max-width: 72ch;
+  margin-top: clamp(26px, 2.8vw, 40px);
+  font-size: 1rem;
+  line-height: 1.74;
+  color: var(--cream-2);
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+/* the head already drew a rule; a leading h2 must not draw a second one */
+.prose > :is(h2, h3):first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose pre,
+.prose table,
+.prose blockquote {
+  margin-block: 1.15em;
+}
+
+.prose h2 {
+  margin-top: 2.3em;
+  padding-top: 0.95em;
+  border-top: 1px solid var(--keyline);
+  font-family: var(--display);
+  font-size: clamp(1.313rem, 1rem + 0.78vw, 1.625rem);
+  line-height: 1.22;
+  letter-spacing: 0.005em;
+  color: var(--cream);
+}
+
+.prose h3 {
+  margin-top: 1.9em;
+  font-family: var(--display);
+  font-size: clamp(1.063rem, 0.98rem + 0.22vw, 1.188rem);
+  line-height: 1.3;
+  color: var(--cream);
+}
+
+.prose h2 + h3 {
+  margin-top: 1.25em;
+}
+
+.prose :is(h2, h3) {
+  scroll-margin-top: 26px;
+}
+
+.prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(232 179 58 / 0.45);
+}
+
+.prose a:hover,
+.prose a:focus-visible {
+  text-decoration-color: currentColor;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: var(--cream);
+  background: rgb(244 234 214 / 0.09);
+  padding: 2px 6px;
+}
+
+.prose pre {
+  padding: 18px 20px;
+  background: var(--term-bg);
+  border: 1px solid var(--keyline);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.62;
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* the wrapper the copy affordance is hung on, built by the docs layout */
+.prose .code-block {
+  position: relative;
+  margin-block: 1.15em;
+}
+
+.prose .code-block pre {
+  margin: 0;
+  /* keep a long first line out from under the button */
+  padding-right: 80px;
+}
+
+.code-copy {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 9px 13px;
+  background: var(--term-chrome);
+  border-left: 1px solid var(--keyline);
+  border-bottom: 1px solid var(--keyline);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--cream-3);
+}
+
+.code-copy:hover,
+.code-copy:focus-visible {
+  color: var(--amber);
+}
+
+.code-copy[data-copied="true"] {
+  color: var(--term-green);
+}
+
+/*
+ * Shiki writes its own background onto the <pre> as an inline style, and the
+ * code blocks have to sit on the same terminal ground the landing page uses.
+ */
+.prose pre.astro-code {
+  background-color: var(--term-bg) !important;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.35em;
+}
+
+.prose li {
+  margin-block: 0.45em;
+}
+
+.prose li::marker {
+  color: var(--cream-3);
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding-left: 1.1em;
+  border-left: 3px solid var(--amber);
+  color: var(--cream-3);
+}
+
+.prose hr {
+  margin-block: 2.4em;
+  border: 0;
+  border-top: 1px solid var(--keyline);
+}
+
+.prose img {
+  border: 1px solid var(--keyline);
+}
+
+/* ── tables ────────────────────────────────────────────────────────────── */
+
+/*
+ * `.docs-table` is the hook for the generated keys and config pages, which
+ * build their tables in .astro rather than Markdown — same ink, same rules.
+ */
+.prose table,
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.prose th,
+.docs-table th {
+  padding: 10px 16px 10px 0;
+  border-bottom: 1px solid var(--keyline-strong);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-2);
+}
+
+.prose td,
+.docs-table td {
+  padding: 11px 16px 11px 0;
+  border-bottom: 1px solid var(--keyline);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.prose :is(th, td):last-child,
+.docs-table :is(th, td):last-child {
+  padding-right: 0;
+}
+
+/* Wrap a wide table in this on an .astro page; Markdown tables get the
+   narrow-screen fallback below, which needs no wrapper. */
+.docs-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+@media (max-width: 599px) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* ── table of contents ─────────────────────────────────────────────────── */
+
+.docs-toc {
+  display: none;
+}
+
+@media (min-width: 1260px) {
+  .docs-toc {
+    display: block;
+    position: sticky;
+    top: 30px;
+    align-self: start;
+  }
+
+  .docs-toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--keyline);
+  }
+
+  .docs-toc a {
+    display: block;
+    padding: 6px 0 6px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 0.813rem;
+    line-height: 1.45;
+    color: var(--cream-3);
+  }
+
+  .docs-toc li[data-depth="3"] a {
+    padding-left: 26px;
+    font-size: 0.781rem;
+  }
+
+  .docs-toc a:hover,
+  .docs-toc a:focus-visible {
+    color: var(--amber);
+    border-left-color: var(--keyline-strong);
+  }
 }

@@ -1,0 +1,33 @@
+---
+/**
+ * The footer stamp — the page's one centred, symmetric moment. Shared by the
+ * landing page and the docs so a reader never falls off the bottom of one into
+ * a different-looking site.
+ */
+import BasketMark from "./BasketMark.astro";
+
+const REPO = "https://github.com/frankieramirez/bushel";
+---
+
+<footer class="colophon">
+  <div class="wrap"><div class="rule"></div></div>
+  <div class="wrap colophon-inner">
+    <BasketMark size={54} />
+    <span class="stamp">bushel</span>
+    <p class="tagline">A container that holds apples</p>
+
+    <nav class="colophon-links" aria-label="Project">
+      <a href="/docs">Docs</a>
+      <a href={REPO}>GitHub</a>
+      <a href={`${REPO}/releases`}>Releases</a>
+      <a href={`${REPO}/blob/main/SPEC.md`}>Spec</a>
+      <a href={`${REPO}/blob/main/LICENSE`}>MIT</a>
+    </nav>
+
+    <p class="disclaimer">
+      Not affiliated with Apple<span class="only-wide-inline"> · </span><br
+        class="br-narrow"
+      />container is Apple's open-source CLI
+    </p>
+  </div>
+</footer>

@@ -2,12 +2,9 @@
 import Base from "../layouts/Base.astro";
 import BasketMark from "../components/BasketMark.astro";
 import Command from "../components/Command.astro";
-import ExternalArrow from "../components/ExternalArrow.astro";
-import { latestVersion } from "../lib/version";
+import Masthead from "../components/Masthead.astro";
+import Colophon from "../components/Colophon.astro";
 
-const version = await latestVersion();
-
-const REPO = "https://github.com/frankieramirez/bushel";
 const INSTALL = "curl -LsSf https://bushel.sh/install | sh";
 
 const description =
@@ -53,44 +50,7 @@ const features = [
 >
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- ══ stencil header ══ -->
-  <header class="masthead">
-    <div class="wrap stencil">
-      <span class="masthead-mark">
-        <span class="stamp">bushel</span>
-        <span class="masthead-version">v{version}</span>
-      </span>
-
-      <span class="masthead-spec"
-        >macOS 26 · Apple silicon · container 1.2.x</span
-      >
-
-      <nav class="masthead-links" aria-label="Project">
-        <a href={`${REPO}/blob/main/LICENSE`}>MIT</a>
-        <a href={`${REPO}/blob/main/SPEC.md`}>Spec <ExternalArrow /></a>
-        <a href={REPO}>GitHub <ExternalArrow /></a>
-      </nav>
-
-      <a class="masthead-gh" href={REPO} aria-label="bushel on GitHub">
-        <svg
-          width="19"
-          height="19"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6A4.6 4.6 0 0 0 18.9 6a4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.3 0C6.6 2.5 5.5 2.8 5.5 2.8A4.3 4.3 0 0 0 5.4 6 4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"
-          ></path>
-        </svg>
-      </a>
-    </div>
-  </header>
+  <Masthead />
 
   <main id="main">
     <!-- ══ hero ══ -->
@@ -308,28 +268,7 @@ const features = [
     </section>
   </main>
 
-  <!-- ══ footer stamp — the one centred moment ══ -->
-  <footer class="colophon">
-    <div class="wrap"><div class="rule"></div></div>
-    <div class="wrap colophon-inner">
-      <BasketMark size={54} />
-      <span class="stamp">bushel</span>
-      <p class="tagline">A container that holds apples</p>
-
-      <nav class="colophon-links" aria-label="Project">
-        <a href={REPO}>GitHub</a>
-        <a href={`${REPO}/releases`}>Releases</a>
-        <a href={`${REPO}/blob/main/SPEC.md`}>Spec</a>
-        <a href={`${REPO}/blob/main/LICENSE`}>MIT</a>
-      </nav>
-
-      <p class="disclaimer">
-        Not affiliated with Apple<span class="only-wide-inline"> · </span><br
-          class="br-narrow"
-        />container is Apple's open-source CLI
-      </p>
-    </div>
-  </footer>
+  <Colophon />
 </Base>
 
 <script>

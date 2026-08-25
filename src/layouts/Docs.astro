@@ -1,0 +1,160 @@
+---
+/**
+ * The chrome every docs page hangs off: shared masthead, contents nav, prose
+ * column, table of contents, shared colophon.
+ *
+ * It serves both kinds of docs page, which is why the props are read two ways.
+ * A Markdown page in `src/pages/docs/` is handed to a layout as `frontmatter`
+ * plus a `headings` walk that Astro does for us; an `.astro` page (the
+ * generated keys and config tables) renders `<Docs title=… >` directly and
+ * passes its own headings if it wants a table of contents.
+ *
+ * Decided in https://github.com/frankieramirez/bushel/issues/45
+ */
+import Base from "./Base.astro";
+import Masthead from "../components/Masthead.astro";
+import Colophon from "../components/Colophon.astro";
+import DocsNav from "../components/DocsNav.astro";
+import { currentDocsPage } from "../lib/docs";
+
+export interface MarkdownHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Frontmatter {
+  title?: string;
+  description?: string;
+  lede?: string;
+}
+
+interface Props {
+  title?: string;
+  description?: string;
+  lede?: string;
+  /** Astro fills this in for Markdown pages; `.astro` pages pass their own. */
+  headings?: MarkdownHeading[];
+  /** Astro fills this in for Markdown pages. */
+  frontmatter?: Frontmatter;
+}
+
+const { frontmatter, headings = [] } = Astro.props;
+
+const entry = currentDocsPage(Astro.url.pathname);
+
+// The contents list is the nav. A page missing from it is a page no reader can
+// reach, so say so at build time rather than shipping an unreachable "Doc. 00".
+if (!entry) {
+  throw new Error(
+    `${Astro.url.pathname} is not in DOCS_PAGES (src/lib/docs.ts). ` +
+      `Add it there — the sidebar, the ribbon and the plate number all read that list.`,
+  );
+}
+
+const title = Astro.props.title ?? frontmatter?.title ?? entry.title;
+const description =
+  Astro.props.description ?? frontmatter?.description ?? entry.summary;
+const lede = Astro.props.lede ?? frontmatter?.lede ?? entry.summary;
+
+// h2 and h3 only. Deeper headings make the column a second sidebar, and h1 is
+// the page title already printed above the rule.
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<Base title={`${title} — bushel docs`} description={description}>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <Masthead />
+
+  <div class="docs">
+    <div class="wrap docs-grid">
+      <DocsNav />
+
+      <main id="main" class="docs-main">
+        <header class="docs-head">
+          <p class="fig">
+            <span class="fig-no">Doc. {entry.no}</span>
+            <span class="fig-name">{entry.title}</span>
+          </p>
+          <h1 class="docs-title">{title}</h1>
+          {lede && <p class="docs-lede">{lede}</p>}
+          <div class="rule"></div>
+        </header>
+
+        <div class="prose">
+          <slot />
+        </div>
+      </main>
+
+      {
+        toc.length > 0 && (
+          <aside class="docs-toc" aria-labelledby="toc-label">
+            <p class="stencil docs-nav-label" id="toc-label">
+              On this page
+            </p>
+            <ul>
+              {toc.map((heading) => (
+                <li data-depth={heading.depth}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+
+  <Colophon />
+</Base>
+
+<script>
+  /*
+   * A copy affordance on every fenced code block, in the same ink as the
+   * landing page's command rows.
+   *
+   * The prose pages are Markdown, so they cannot reach for the `Command`
+   * component the landing page uses — and the install page is the most
+   * copy-critical page on the site. Built here rather than in the Markdown so
+   * a reader without JavaScript sees a plain code block instead of a dead
+   * button.
+   */
+  const RESET_MS = 1600;
+
+  document.querySelectorAll<HTMLPreElement>(".prose pre").forEach((pre) => {
+    const code = pre.querySelector("code");
+    if (!code) return;
+
+    const wrap = document.createElement("div");
+    wrap.className = "code-block";
+    pre.replaceWith(wrap);
+    wrap.appendChild(pre);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "code-copy";
+    button.textContent = "COPY";
+    button.setAttribute("aria-label", "Copy this code");
+    wrap.appendChild(button);
+
+    let timer: number | undefined;
+
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(code.innerText.replace(/\n$/, ""));
+      } catch {
+        return; // no clipboard here — leave the affordance untouched
+      }
+
+      button.dataset.copied = "true";
+      button.textContent = "COPIED";
+
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        delete button.dataset.copied;
+        button.textContent = "COPY";
+      }, RESET_MS);
+    });
+  });
+</script>
