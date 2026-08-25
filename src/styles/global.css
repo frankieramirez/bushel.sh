@@ -1,0 +1,949 @@
+/*
+ * bushel.sh — "Crate, as a page"
+ *
+ * The visual spec is the design canvas locked in
+ * https://github.com/frankieramirez/bushel/issues/32
+ * Orchard-green fruit-crate label: flat colour, hard edges, no rounded corners,
+ * two-colour press rhythm (cream ink on green, flipped to green ink on cream
+ * for the features band), FIG-numbered sections.
+ */
+
+/* ── fonts ─────────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "Bevan";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/bevan-latin-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/fonts/archivo-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── tokens ────────────────────────────────────────────────────────────── */
+
+:root {
+  /* the press: two inks, two accents */
+  --green: #123a24;
+  --cream: #f4ead6;
+  --red: #d93a2b;
+  --amber: #e8b33a;
+
+  /* cream ink, stepped down */
+  --cream-2: #cbbf9e;
+  --cream-3: #9db09a;
+  --keyline: rgb(244 234 214 / 0.28);
+  --keyline-strong: rgb(244 234 214 / 0.34);
+
+  /* green ink on the flipped band */
+  --green-2: #3d5a48;
+  --green-3: #4e6b57;
+  --red-ink: #b8452f;
+  --keyline-dark: rgb(18 58 36 / 0.26);
+
+  /* the terminal keeps bushel's own palette (src/ui/theme.rs) */
+  --term-bg: #0f1117;
+  --term-chrome: #11141c;
+  --term-rule: #1c2130;
+  --term-green: #7ee787;
+  --term-red: #ff7b72;
+  --term-amber: #e3b341;
+  --term-dim: #8b93a1;
+
+  --display: Bevan, Georgia, "Times New Roman", serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --body: Archivo, ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ── base ──────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--green);
+  color: var(--cream);
+  font-family: var(--body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+}
+
+a {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--cream);
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.band-cream :focus-visible {
+  outline-color: var(--red-ink);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -120%);
+  z-index: 10;
+  padding: 10px 18px;
+  background: var(--cream);
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+.skip-link:focus {
+  transform: translate(-50%, 0);
+  color: var(--green);
+}
+
+/* ── the gutter ────────────────────────────────────────────────────────── */
+
+.wrap {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 560px) {
+  .wrap {
+    padding-inline: 40px;
+  }
+}
+
+@media (min-width: 900px) {
+  .wrap {
+    padding-inline: 72px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .wrap {
+    padding-inline: clamp(72px, 11.11vw, 160px);
+  }
+}
+
+/* ── responsive scraps ────────────────────────────────────────────────── */
+
+.only-narrow,
+.br-narrow {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .only-wide,
+  .only-wide-inline {
+    display: none;
+  }
+
+  .only-narrow {
+    display: block;
+  }
+
+  .br-narrow {
+    display: inline;
+  }
+}
+
+@media (max-width: 639px) {
+  .br-wide {
+    display: none;
+  }
+}
+
+/* ── stencil type ──────────────────────────────────────────────────────── */
+
+.stencil {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  color: var(--cream-2);
+  text-transform: uppercase;
+}
+
+.fig {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.fig-no {
+  color: var(--amber);
+}
+
+.fig-name {
+  color: var(--cream-2);
+}
+
+.band-cream .fig-no {
+  color: var(--red-ink);
+}
+
+.band-cream .fig-name {
+  color: var(--green-3);
+}
+
+.display {
+  font-family: var(--display);
+  letter-spacing: 0.005em;
+  line-height: 1.06;
+}
+
+/* The offset shadow smudges below 14px — never render the mark smaller. */
+.stamp {
+  font-family: var(--display);
+  text-transform: uppercase;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  text-shadow: 2px 2px 0 var(--red);
+}
+
+.mono {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  color: var(--cream);
+}
+
+.band-cream .mono {
+  color: var(--green);
+}
+
+/* ── header ────────────────────────────────────────────────────────────── */
+
+.masthead {
+  border-bottom: 1px solid var(--keyline-strong);
+}
+
+.masthead .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding-block: 15px;
+}
+
+.masthead-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.masthead-mark .stamp {
+  font-size: 15px;
+}
+
+.masthead-version {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--amber);
+}
+
+.masthead-spec {
+  white-space: nowrap;
+}
+
+.masthead-links {
+  display: flex;
+  gap: 22px;
+}
+
+.masthead-links a {
+  color: var(--cream-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.masthead-links a:hover,
+.masthead-links a:focus-visible {
+  color: var(--amber);
+}
+
+.masthead-gh {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  color: var(--cream-2);
+}
+
+.masthead-gh:hover,
+.masthead-gh:focus-visible {
+  color: var(--amber);
+}
+
+@media (max-width: 899px) {
+  .masthead-spec,
+  .masthead-links {
+    display: none;
+  }
+
+  .masthead-gh {
+    display: flex;
+  }
+
+  .masthead-mark .stamp {
+    font-size: 14px;
+  }
+
+  .masthead .wrap {
+    padding-block: 12px;
+  }
+}
+
+/* ── hero ──────────────────────────────────────────────────────────────── */
+
+.hero .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 60px;
+  align-items: center;
+  /* the slack above the cream rule is deliberate — it carries the demo */
+  padding-block: clamp(40px, 5.7vw, 82px) clamp(40px, 5.4vw, 78px);
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(10px, 0.24vw + 9px, 11px);
+  letter-spacing: 0.3em;
+  color: var(--amber);
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin-top: 22px;
+  font-family: var(--display);
+  font-size: clamp(2.375rem, 1.2rem + 3.6vw, 4.375rem);
+  line-height: 1.03;
+  letter-spacing: 0.005em;
+  color: var(--cream);
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+.hero-lede {
+  margin-top: clamp(18px, 1.4vw, 30px);
+  max-width: 620px;
+  font-size: clamp(0.97rem, 0.85rem + 0.36vw, 1.094rem);
+  line-height: 1.64;
+  color: var(--cream-2);
+}
+
+.hero-note {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+  color: var(--cream-3);
+  text-transform: uppercase;
+}
+
+.hero-mark {
+  justify-self: center;
+}
+
+@media (max-width: 999px) {
+  .hero .wrap {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .hero-mark {
+    display: none;
+  }
+}
+
+/* ── command lines ─────────────────────────────────────────────────────── */
+
+.cmd {
+  display: flex;
+  align-items: stretch;
+  background: var(--term-bg);
+  max-width: 100%;
+}
+
+.hero .cmd {
+  margin-top: clamp(24px, 2.5vw, 36px);
+  align-self: stretch;
+}
+
+@media (min-width: 700px) {
+  .hero .cmd {
+    align-self: flex-start;
+  }
+}
+
+.cmd-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 18px 22px;
+  font-family: var(--mono);
+  font-size: clamp(11px, 0.4vw + 9.4px, 15px);
+  line-height: 1.5;
+  color: var(--cream);
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: pre;
+}
+
+.cmd-text::-webkit-scrollbar {
+  display: none;
+}
+
+.cmd-prompt {
+  color: var(--term-green);
+}
+
+.copy {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 20px;
+  border-left: 1px solid rgb(244 234 214 / 0.2);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--cream-2);
+  transition: color 120ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy {
+    transition: none;
+  }
+}
+
+.copy:hover,
+.copy:focus-visible {
+  color: var(--amber);
+}
+
+.copy[data-copied="true"] {
+  color: var(--term-green);
+}
+
+.copy svg {
+  flex: none;
+  stroke: currentColor;
+}
+
+/*
+ * Narrow enough and the long commands would scroll out of sight inside their
+ * own cell — let them wrap instead, so nothing is hidden from a reader who
+ * types rather than copies.
+ */
+@media (max-width: 699px) {
+  .cmd-text {
+    white-space: pre-wrap;
+    overflow-x: visible;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 559px) {
+  .cmd-text {
+    padding: 15px 14px;
+  }
+
+  .copy {
+    padding: 15px 12px;
+  }
+
+  .copy-label {
+    display: none;
+  }
+}
+
+/* ── fig 01 — demo ─────────────────────────────────────────────────────── */
+
+.demo .wrap {
+  padding-block: clamp(36px, 4.3vw, 62px) clamp(44px, 5.1vw, 74px);
+}
+
+.rule {
+  height: 3px;
+  background: var(--cream);
+}
+
+.terminal-figure {
+  margin: 22px 0 0;
+}
+
+.terminal {
+  background: var(--term-bg);
+  border: 1px solid rgb(244 234 214 / 0.24);
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 15px;
+  background: var(--term-chrome);
+  border-bottom: 1px solid var(--term-rule);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--term-dim);
+}
+
+.terminal-lights {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 0;
+}
+
+.terminal-lights span {
+  display: block;
+  width: 9px;
+  height: 9px;
+}
+
+.terminal-title {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.terminal-toggle {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-end;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--term-dim);
+  transition: color 120ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-toggle {
+    transition: none;
+  }
+}
+
+.terminal-toggle:hover,
+.terminal-toggle:focus-visible {
+  color: var(--amber);
+}
+
+.terminal video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 760;
+  background: var(--term-bg);
+}
+
+.demo-caption {
+  margin-top: 13px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  line-height: 1.7;
+  color: var(--cream-3);
+  text-transform: uppercase;
+}
+
+@media (max-width: 559px) {
+  .terminal-lights span {
+    width: 7px;
+    height: 7px;
+  }
+
+  .terminal-lights {
+    gap: 5px;
+  }
+
+  .terminal-bar {
+    padding: 8px 11px;
+    font-size: 9.5px;
+  }
+
+  .terminal-toggle {
+    font-size: 9.5px;
+  }
+
+  .demo-caption {
+    font-size: 9.5px;
+    text-align: center;
+  }
+}
+
+/* ── fig 02 — features, ink reversed ───────────────────────────────────── */
+
+.band-cream {
+  background: var(--cream);
+  color: var(--green);
+}
+
+.band-cream .wrap {
+  padding-block: clamp(46px, 5.3vw, 76px) clamp(50px, 5.7vw, 82px);
+}
+
+.band-heading {
+  margin-top: clamp(14px, 1.4vw, 20px);
+  font-family: var(--display);
+  font-size: clamp(1.875rem, 1.06rem + 2.3vw, 2.875rem);
+  line-height: 1.07;
+  letter-spacing: 0.005em;
+}
+
+.band-lede {
+  margin-top: clamp(14px, 1.4vw, 20px);
+  max-width: 620px;
+  font-size: clamp(0.94rem, 0.86rem + 0.24vw, 1.063rem);
+  line-height: 1.62;
+  color: var(--green-2);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: clamp(30px, 3.2vw, 46px);
+  background: var(--keyline-dark);
+  border: 1px solid var(--keyline-dark);
+}
+
+.feature {
+  background: var(--cream);
+  padding: clamp(22px, 2vw, 30px) clamp(20px, 1.9vw, 28px) clamp(26px, 2.4vw, 34px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(9px, 0.8vw, 12px);
+}
+
+.feature-no {
+  font-family: var(--display);
+  font-size: clamp(21px, 0.35vw + 19.6px, 26px);
+  line-height: 1;
+  color: var(--red-ink);
+}
+
+.feature h3 {
+  font-family: var(--display);
+  font-size: clamp(17px, 0.14vw + 16.5px, 19px);
+  line-height: 1.22;
+  letter-spacing: 0.005em;
+}
+
+.feature p {
+  font-size: clamp(0.875rem, 0.85rem + 0.04vw, 0.906rem);
+  line-height: 1.62;
+  color: var(--green-2);
+}
+
+@media (max-width: 999px) {
+  .features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── fig 03 — install ──────────────────────────────────────────────────── */
+
+.install .wrap {
+  padding-block: clamp(46px, 5.3vw, 76px) clamp(48px, 5.6vw, 80px);
+}
+
+.install-heading {
+  margin-top: clamp(14px, 1.4vw, 20px);
+  font-family: var(--display);
+  font-size: clamp(1.875rem, 1.06rem + 2.3vw, 2.875rem);
+  letter-spacing: 0.005em;
+  color: var(--cream);
+}
+
+.install-lede {
+  margin-top: clamp(14px, 1.3vw, 18px);
+  max-width: 620px;
+  font-size: clamp(0.94rem, 0.86rem + 0.24vw, 1.063rem);
+  line-height: 1.62;
+  color: var(--cream-2);
+}
+
+.methods {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: clamp(28px, 2.9vw, 42px);
+  background: var(--keyline);
+  border: 1px solid var(--keyline);
+}
+
+.method {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 1px;
+  background: var(--keyline);
+}
+
+.method-label {
+  background: var(--green);
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--cream-2);
+  text-transform: uppercase;
+}
+
+.method-label.is-start {
+  color: var(--cream);
+}
+
+.method-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--amber);
+}
+
+.method .cmd {
+  background: var(--term-bg);
+}
+
+.method .cmd-text {
+  padding: 22px 24px;
+}
+
+.method .copy {
+  padding: 22px 20px;
+}
+
+/* the rows sit inside the methods keyline, so they get a touch less than the hero */
+@media (max-width: 559px) {
+  .method .cmd-text {
+    padding: 15px 12px;
+  }
+
+  .method .copy {
+    padding: 15px 10px;
+  }
+}
+
+@media (max-width: 799px) {
+  .method {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .method-label {
+    padding: 14px 16px 12px;
+    font-size: 10.5px;
+  }
+}
+
+.install-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 48px;
+  margin-top: 30px;
+}
+
+.install-notes p {
+  font-size: 0.875rem;
+  line-height: 1.72;
+  color: var(--cream-3);
+}
+
+.install-notes strong {
+  font-weight: 400;
+  color: var(--cream);
+}
+
+.install-notes .mono {
+  color: var(--cream-2);
+}
+
+@media (max-width: 799px) {
+  .install-notes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .install-notes p {
+    font-size: 0.813rem;
+    line-height: 1.65;
+  }
+}
+
+/* ── footer stamp — the one centred moment ─────────────────────────────── */
+
+.colophon .rule {
+  height: 3px;
+}
+
+.colophon-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: clamp(38px, 3.9vw, 56px) clamp(42px, 4.2vw, 60px);
+  text-align: center;
+}
+
+.colophon .stamp {
+  margin-top: clamp(14px, 1.2vw, 18px);
+  font-size: clamp(28px, 0.83vw + 24.8px, 40px);
+  text-shadow: clamp(3px, 0.07vw + 2.7px, 4px) clamp(3px, 0.07vw + 2.7px, 4px) 0
+    var(--red);
+}
+
+.tagline {
+  margin-top: clamp(12px, 0.9vw, 18px);
+  font-family: var(--mono);
+  font-size: clamp(9.5px, 0.1vw + 9.1px, 11px);
+  letter-spacing: 0.24em;
+  color: var(--amber);
+  text-transform: uppercase;
+}
+
+.colophon-links {
+  text-transform: uppercase;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+}
+
+.colophon-links a {
+  padding: 10px 8px;
+}
+
+@media (min-width: 800px) {
+  .colophon-links {
+    gap: 30px;
+    margin-top: 22px;
+  }
+
+  .colophon-links a {
+    padding: 6px 0;
+  }
+}
+
+.disclaimer {
+  margin-top: clamp(16px, 1.4vw, 26px);
+  font-family: var(--mono);
+  font-size: clamp(9px, 0.1vw + 8.6px, 10.5px);
+  letter-spacing: 0.14em;
+  line-height: 1.7;
+  color: var(--cream-3);
+  text-transform: uppercase;
+}

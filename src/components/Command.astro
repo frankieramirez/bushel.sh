@@ -1,0 +1,41 @@
+---
+/**
+ * A shell command with a copy affordance. `command` is both what is shown after
+ * the prompt and what lands on the clipboard — the `$ ` never gets copied.
+ */
+interface Props {
+  command: string;
+  /** Icon-only copy button, for the install rows where the label crowds the row. */
+  compact?: boolean;
+}
+
+const { command, compact = false } = Astro.props;
+---
+
+<div class="cmd">
+  <code class="cmd-text"><span class="cmd-prompt" aria-hidden="true">$ </span
+    >{command}</code
+  >
+  <button
+    type="button"
+    class="copy"
+    data-copy={command}
+    aria-label={`Copy command: ${command}`}
+  >
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect x="9" y="9" width="12" height="12"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    {!compact && <span class="copy-label" aria-hidden="true">COPY</span>}
+  </button>
+</div>

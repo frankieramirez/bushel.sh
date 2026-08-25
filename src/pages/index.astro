@@ -1,27 +1,410 @@
 ---
-// Placeholder while the landing page is built from the design canvas.
+import Base from "../layouts/Base.astro";
+import BasketMark from "../components/BasketMark.astro";
+import Command from "../components/Command.astro";
+import ExternalArrow from "../components/ExternalArrow.astro";
+import { latestVersion } from "../lib/version";
+
+const version = await latestVersion();
+
+const REPO = "https://github.com/frankieramirez/bushel";
+const INSTALL = "curl -LsSf https://bushel.sh/install | sh";
+
+const description =
+  "bushel manages the containers, images and volumes already on your Mac. One rail for all three, live telemetry on the selection, and the exact container command shown before anything destructive runs.";
+
+const features = [
+  {
+    no: "01",
+    head: ["One rail,", "all three"],
+    body: "Containers, images and volumes stay on screen together. The active pane takes the space; the others collapse to a name or a count.",
+  },
+  {
+    no: "02",
+    head: ["Telemetry on", "the selection"],
+    body: "CPU and memory sparklines with network and disk rates, sampled every poll tick. No dashboard, no configuration.",
+  },
+  {
+    no: "03",
+    head: ["The command,", "before it runs"],
+    body: 'Delete, prune and kill each show the exact <span class="mono">container …</span> line in the confirmation. Nothing destructive happens off-screen.',
+  },
+  {
+    no: "04",
+    head: ["Logs that", "keep up"],
+    body: 'A bounded tail with follow and wrap toggles. bushel owns its <span class="mono">logs -f</span> subprocesses and kills them, so nothing leaks when a container stops.',
+  },
+  {
+    no: "05",
+    head: ["Drop into", "a shell"],
+    body: 'Press <span class="mono">e</span>. bushel suspends itself, hands stdio to <span class="mono">container exec -it</span>, and restores the layout when you exit.',
+  },
+  {
+    no: "06",
+    head: ["Motion you", "never wait on"],
+    body: 'Every animation is 150 ms or less, interruptible, and never delays data or input. <span class="mono">--reduced-motion</span> turns all of it off.',
+  },
+];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>bushel</title>
-    <meta
-      name="description"
-      content="A terminal UI for managing Apple Containers."
-    />
-  </head>
-  <body>
-    <main>
-      <h1>bushel</h1>
-      <p>A terminal UI for managing Apple Containers. Site coming soon.</p>
-      <p>
-        Install:
-        <code>curl -LsSf https://bushel.sh/install | sh</code>
+<Base
+  title="bushel — a terminal UI for Apple Containers"
+  description={description}
+>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ══ stencil header ══ -->
+  <header class="masthead">
+    <div class="wrap stencil">
+      <span class="masthead-mark">
+        <span class="stamp">bushel</span>
+        <span class="masthead-version">v{version}</span>
+      </span>
+
+      <span class="masthead-spec"
+        >macOS 26 · Apple silicon · container 1.2.x</span
+      >
+
+      <nav class="masthead-links" aria-label="Project">
+        <a href={`${REPO}/blob/main/LICENSE`}>MIT</a>
+        <a href={`${REPO}/blob/main/SPEC.md`}>Spec <ExternalArrow /></a>
+        <a href={REPO}>GitHub <ExternalArrow /></a>
+      </nav>
+
+      <a class="masthead-gh" href={REPO} aria-label="bushel on GitHub">
+        <svg
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6A4.6 4.6 0 0 0 18.9 6a4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.3 0C6.6 2.5 5.5 2.8 5.5 2.8A4.3 4.3 0 0 0 5.4 6 4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"
+          ></path>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ══ hero ══ -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-copy">
+          <p class="eyebrow">Containers · Images · Volumes</p>
+
+          <h1>A terminal UI<br />for <em>Apple<br />Containers</em></h1>
+
+          <p class="hero-lede">
+            bushel manages the containers, images and volumes already on your
+            Mac. All three on one rail, live telemetry on the selection, and the
+            exact <span class="mono">container</span> command shown before
+            anything destructive runs.
+          </p>
+
+          <Command command={INSTALL} />
+
+          <p class="hero-note only-wide">
+            No Homebrew required · <a href="#install">brew and cargo below</a>
+          </p>
+          <p class="hero-note only-narrow">
+            No Homebrew required<br />
+            macOS 26 · Apple silicon · <a href="#install">brew + cargo below</a>
+          </p>
+        </div>
+
+        <BasketMark size={320} class="hero-mark" />
+      </div>
+    </section>
+
+    <div class="wrap"><div class="rule"></div></div>
+
+    <!-- ══ fig 01 — the demo ══ -->
+    <section class="demo" aria-labelledby="fig-01">
+      <div class="wrap">
+        <h2 class="fig" id="fig-01">
+          <span class="fig-no">Fig. 01</span>
+          <span class="fig-name"
+            >The rail, the detail pane, the action menu</span
+          >
+        </h2>
+
+        <figure class="terminal-figure">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="terminal-lights" aria-hidden="true">
+                <span style="background:#ff7b72"></span>
+                <span style="background:#e3b341"></span>
+                <span style="background:#7ee787"></span>
+              </span>
+              <span class="terminal-title">bushel — recorded session</span>
+              <button
+                type="button"
+                class="terminal-toggle"
+                data-demo-toggle
+                aria-controls="demo-video"
+                aria-label="Pause the demo">PAUSE</button
+              >
+            </div>
+
+            <video
+              id="demo-video"
+              autoplay
+              muted
+              loop
+              playsinline
+              width="1200"
+              height="760"
+              poster="/demo/bushel-demo-poster.jpg"
+              aria-label="A recorded bushel session: the rail of running containers with live CPU and memory, the detail pane following a worker's logs, then a container stopped and started again — each confirmed with the exact container command."
+            >
+              <source src="/demo/bushel-demo.webm" type="video/webm" />
+              <source src="/demo/bushel-demo.mp4" type="video/mp4" />
+            </video>
+
+            <!--
+              Runs during parse, before autoplay can begin — the module script
+              below is deferred, and by the time it ran the recording would
+              already be moving. bushel turns its own motion off on request; so
+              does its landing page.
+            -->
+            <script is:inline>
+              (function () {
+                if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+                  return;
+                var video = document.getElementById("demo-video");
+                if (!video) return;
+                video.autoplay = false;
+                video.removeAttribute("autoplay");
+                video.pause();
+                video.dataset.reducedMotion = "true";
+                var toggle = document.querySelector("[data-demo-toggle]");
+                if (toggle) {
+                  toggle.textContent = "PLAY";
+                  toggle.setAttribute("aria-label", "Play the demo");
+                }
+              })();
+            </script>
+          </div>
+
+          <figcaption class="demo-caption">
+            [ A real session — the rail, log follow, and a confirmed stop and
+            start ]
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ══ fig 02 — features, ink reversed ══ -->
+    <section class="band-cream" aria-labelledby="features-heading">
+      <div class="wrap">
+        <p class="fig">
+          <span class="fig-no">Fig. 02</span>
+          <span class="fig-name">What is in the box</span>
+        </p>
+
+        <h2 class="band-heading" id="features-heading">
+          A manager,<br class="br-wide" /> not a launcher.
+        </h2>
+
+        <p class="band-lede">
+          Containers are born on the command line. bushel manages what already
+          exists, and does it without hiding what it is doing.
+        </p>
+
+        <div class="features">
+          {
+            features.map((feature) => (
+              <article class="feature">
+                <span class="feature-no">{feature.no}</span>
+                <h3>
+                  {feature.head[0]} <br class="br-wide" />
+                  {feature.head[1]}
+                </h3>
+                <p set:html={feature.body} />
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ fig 03 — install ══ -->
+    <section class="install" id="install" aria-labelledby="install-heading">
+      <div class="wrap">
+        <p class="fig">
+          <span class="fig-no">Fig. 03</span>
+          <span class="fig-name">Three ways to unpack it</span>
+        </p>
+
+        <h2 class="install-heading" id="install-heading">Install</h2>
+
+        <p class="install-lede">
+          macOS 26 on Apple silicon, with Apple's <a
+            href="https://github.com/apple/container">container</a
+          > CLI 1.2.x. bushel warns on untested versions but still runs.
+        </p>
+
+        <div class="methods">
+          <div class="method">
+            <span class="method-label is-start">
+              Shell
+              <span class="method-start">
+                <svg
+                  width="7"
+                  height="9"
+                  viewBox="0 0 7 9"
+                  aria-hidden="true"
+                  focusable="false"
+                  ><path d="M7 0 0 4.5 7 9z" fill="currentColor"></path></svg
+                >
+                Start
+              </span>
+            </span>
+            <Command command={INSTALL} compact />
+          </div>
+
+          <div class="method">
+            <span class="method-label">Homebrew</span>
+            <Command command="brew install frankieramirez/tap/bushel" compact />
+          </div>
+
+          <div class="method">
+            <span class="method-label">From source</span>
+            <Command
+              command="cargo install --git https://github.com/frankieramirez/bushel"
+              compact
+            />
+          </div>
+        </div>
+
+        <div class="install-notes">
+          <p>
+            Installs to <span class="mono">$CARGO_HOME/bin</span> (default <span
+              class="mono">~/.cargo/bin</span
+            >). <span class="mono">BUSHEL_INSTALL_DIR</span> picks another prefix;
+            <span class="mono">BUSHEL_NO_MODIFY_PATH=1</span> leaves your shell rc
+            alone. The script is the checksummed release asset on GitHub — bushel.sh/install
+            only redirects to it.
+          </p>
+          <p>
+            bushel isn't on crates.io, so the cargo install needs <span
+              class="mono">--git</span
+            >. <strong>Upgrading:</strong> run <span class="mono"
+              >bushel update</span
+            >. It knows how it was installed — shell installs replace themselves
+            in place, Homebrew hands off to <span class="mono">brew upgrade</span
+            >, and cargo, Nix or hand-placed binaries are told what to run
+            instead.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══ footer stamp — the one centred moment ══ -->
+  <footer class="colophon">
+    <div class="wrap"><div class="rule"></div></div>
+    <div class="wrap colophon-inner">
+      <BasketMark size={54} />
+      <span class="stamp">bushel</span>
+      <p class="tagline">A container that holds apples</p>
+
+      <nav class="colophon-links" aria-label="Project">
+        <a href={REPO}>GitHub</a>
+        <a href={`${REPO}/releases`}>Releases</a>
+        <a href={`${REPO}/blob/main/SPEC.md`}>Spec</a>
+        <a href={`${REPO}/blob/main/LICENSE`}>MIT</a>
+      </nav>
+
+      <p class="disclaimer">
+        Not affiliated with Apple<span class="only-wide-inline"> · </span><br
+          class="br-narrow"
+        />container is Apple's open-source CLI
       </p>
-      <p><a href="https://github.com/frankieramirez/bushel">GitHub</a></p>
-    </main>
-  </body>
-</html>
+    </div>
+  </footer>
+</Base>
+
+<script>
+  // ── copy affordances ────────────────────────────────────────────────────
+  const RESET_MS = 1600;
+
+  document
+    .querySelectorAll<HTMLButtonElement>("button[data-copy]")
+    .forEach((button) => {
+      const command = button.dataset.copy ?? "";
+      const label = button.querySelector<HTMLElement>(".copy-label");
+      const restore = label?.textContent ?? "";
+      let timer: number | undefined;
+
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(command);
+        } catch {
+          return; // no clipboard here — leave the affordance untouched
+        }
+
+        button.dataset.copied = "true";
+        button.setAttribute("aria-label", `Copied: ${command}`);
+        if (label) label.textContent = "COPIED";
+
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          delete button.dataset.copied;
+          button.setAttribute("aria-label", `Copy command: ${command}`);
+          if (label) label.textContent = restore;
+        }, RESET_MS);
+      });
+    });
+
+  // ── the demo ────────────────────────────────────────────────────────────
+  const video = document.querySelector<HTMLVideoElement>("#demo-video");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-demo-toggle]");
+
+  if (video && toggle) {
+    // The inline script above already stopped the recording for a reader who
+    // asked for reduced motion, and left this flag behind saying so.
+    // What the reader last asked for — the observer only resumes what they left running.
+    let wantsPlay = video.dataset.reducedMotion !== "true";
+
+    // The label reports what the reader asked for, not what the observer did —
+    // scrolling the demo out of view pauses it without flipping the control.
+    const render = () => {
+      toggle.textContent = wantsPlay ? "PAUSE" : "PLAY";
+      toggle.setAttribute(
+        "aria-label",
+        wantsPlay ? "Pause the demo" : "Play the demo",
+      );
+    };
+
+    toggle.addEventListener("click", () => {
+      wantsPlay = !wantsPlay;
+      if (wantsPlay) void video.play().catch(() => {});
+      else video.pause();
+      render();
+    });
+
+    render();
+
+    // Off-screen the recording earns nothing — stop decoding it.
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!wantsPlay) continue;
+            if (entry.isIntersecting) void video.play().catch(() => {});
+            else video.pause();
+          }
+        },
+        { threshold: 0.15 },
+      ).observe(video);
+    }
+  }
+</script>

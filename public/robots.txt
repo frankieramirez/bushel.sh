@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bushel.sh/sitemap.xml
