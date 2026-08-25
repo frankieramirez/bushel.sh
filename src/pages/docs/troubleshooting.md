@@ -169,15 +169,15 @@ thread 'main' panicked at src/ui/layout.rs:216:10:
 min > max. min = 6, max = 2
 ```
 
-A known bug, tracked as
-[#52](https://github.com/frankieramirez/bushel/issues/52). Below 12 rows the
-stacked layout tries to reserve more height for the rail than the frame has,
-and the clamp inverts. It needs both conditions at
+Fixed, but not in a release yet: the fix landed after v0.3.1, so every published
+build still has it ([#52](https://github.com/frankieramirez/bushel/issues/52)).
+Below 12 rows the stacked layout tries to reserve more height for the rail than
+the frame has, and the clamp inverts. It needs both conditions at
 once: fewer than 12 rows **and** fewer than 80 columns, because at 80 columns or
 wider the rail sits beside the detail pane instead of above it.
 
 Resizing to 12 rows or taller clears it, as does widening to 80 columns at any
-height.
+height. Upgrading will too, once the next release is out.
 
 Do not confuse that panic with the floor layout, which is designed. At 22 rows
 or fewer, or 60 columns or fewer, the header shrinks to one row while the table
