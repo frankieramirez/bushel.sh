@@ -5,8 +5,11 @@
  * under the masthead on a phone. Both are the same markup — see `.docs-nav`
  * in global.css — so a screen reader is never offered the links twice.
  */
+import ExternalArrow from "./ExternalArrow.astro";
 import { DOCS_PAGES } from "../lib/docs";
 import { normalisePath } from "../lib/url";
+
+const ROADMAP = "https://github.com/frankieramirez/bushel/issues/56";
 
 const path = normalisePath(Astro.url.pathname);
 ---
@@ -31,5 +34,11 @@ const path = normalisePath(Astro.url.pathname);
         );
       })
     }
+    <li>
+      <a href={ROADMAP} title="What's shipped and what's still to come">
+        <span class="docs-nav-no"><ExternalArrow /></span>
+        <span class="docs-nav-title">Roadmap</span>
+      </a>
+    </li>
   </ol>
 </nav>
