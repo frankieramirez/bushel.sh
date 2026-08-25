@@ -27,7 +27,7 @@ export const DOCS_PAGES: DocsPage[] = [
     no: "01",
     title: "Overview",
     href: "/docs",
-    summary: "What bushel is, what it needs, and where to go next.",
+    summary: "What bushel is, and where to go next.",
   },
   {
     no: "02",
@@ -57,7 +57,7 @@ export const DOCS_PAGES: DocsPage[] = [
     no: "06",
     title: "Why",
     href: "/docs/why",
-    summary: "Why a TUI for Apple Containers, and why it is shaped this way.",
+    summary: "Why a TUI for Apple Containers, and the arguments behind its shape.",
   },
 ];
 

@@ -62,7 +62,7 @@ const lede = Astro.props.lede ?? frontmatter?.lede ?? entry.summary;
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<Base title={`${title} — bushel docs`} description={description}>
+<Base title={`${title} · bushel docs`} description={description}>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <Masthead />

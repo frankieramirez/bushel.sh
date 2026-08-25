@@ -23,8 +23,8 @@ one, or source the env script the installer wrote:
 source "$HOME/.cargo/env"
 ```
 
-Installed with `BUSHEL_NO_MODIFY_PATH=1`? Then your rc files were left alone on
-purpose and putting the directory on `PATH` is your job. Same if you pointed
+If you installed with `BUSHEL_NO_MODIFY_PATH=1`, your rc files were left alone
+on purpose and putting the directory on `PATH` is your job. Same if you pointed
 `BUSHEL_INSTALL_DIR` somewhere the shell does not already look.
 
 Homebrew installs land wherever `brew --prefix` says, which is already on `PATH`
@@ -53,11 +53,12 @@ than feels reasonable before deciding it is stuck. bushel re-probes the service
 every two seconds and drops back to the normal view by itself once the service
 answers, with a `container system service is up` toast.
 
-You can also start the service yourself from another terminal. bushel will
+You can also start the service yourself from another terminal, and bushel will
 notice.
 
-The `--enable-kernel-install` flag matters. A bare `container system start`
-stops on an interactive prompt that a TUI has no way to answer.
+The `--enable-kernel-install` flag is doing real work there. Without it, a bare
+`container system start` stops on an interactive prompt that a TUI has no way to
+answer.
 
 ### Every pane reads 0 and nothing on screen explains why
 
@@ -95,8 +96,9 @@ against the range its fixtures were captured on, currently `1.2.x`. Any patch
 release inside that minor counts as tested. A version it cannot parse counts as
 untested.
 
-Nothing is blocked. The `container` CLI only promises stable output within a
-patch series, so a different minor may have moved the JSON that bushel reads.
+Nothing about it is blocked: the `container` CLI only promises stable output
+within a patch series, so a different minor may have moved the JSON that bushel
+reads.
 Press `b` to dismiss the banner for the session. If output really has moved,
 the degraded banner below is what you will see next.
 
@@ -167,7 +169,7 @@ thing: bushel only uses the full 24-bit palette when `COLORTERM` contains
 At 22 rows or fewer, or 60 columns or fewer, the header shrinks to one row while
 the table headers, the detail tab row, the status cluster and the `l`/`i` jumps
 in the action menu all drop away to buy back space. Narrower than 80 columns,
-the rail stacks above the detail pane rather than sitting beside it.
+the rail stacks above the detail pane instead of sitting beside it.
 
 Smaller again and bushel still draws. The rail and the detail pane split
 whatever rows are left, and once the rail is down to fewer than three rows the

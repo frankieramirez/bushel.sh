@@ -1,14 +1,14 @@
 ---
 title: Overview
 description: Documentation for bushel, a terminal UI for the containers, images and volumes already on your Mac.
-lede: What bushel is, what it needs, and where to go next.
+lede: What bushel is, and where to go next.
 ---
 
 bushel is a terminal UI for [Apple
 Containers](https://github.com/apple/container). It manages the containers,
-images and volumes already on your Mac — all three on one rail, live telemetry
-on whatever is selected, and the exact `container …` command shown before
-anything destructive runs.
+images and volumes already on your Mac. All three sit on one rail with live
+telemetry on whatever is selected, and anything destructive shows you the exact
+`container …` command before it runs.
 
 It wraps Apple's `container` CLI as a subprocess and manages what already
 exists. Containers are born on the command line; bushel is the part that comes
@@ -32,16 +32,16 @@ does for each method.
 
 ## Where to go next
 
-- **[Install](/docs/install)** — every install method, and how each one
+- **[Install](/docs/install)**: every install method, and how each one
   upgrades.
-- **[Keys](/docs/keys)** — the full keymap, generated from the cheatsheet bushel
+- **[Keys](/docs/keys)**: the full keymap, generated from the cheatsheet bushel
   ships. Press `?` for the same list without leaving the terminal.
-- **[Config](/docs/config)** — the three options in
+- **[Config](/docs/config)**: the three options in
   `~/.config/bushel/config.toml` and the flags that override them.
-- **[Troubleshooting](/docs/troubleshooting)** — what to do when bushel will not
+- **[Troubleshooting](/docs/troubleshooting)**: what to do when bushel will not
   start, shows nothing, or refuses an action.
-- **[Why](/docs/why)** — a manager not a launcher, one rail at every size, and
-  motion with rules.
+- **[Why](/docs/why)**: the arguments behind the shape, from where the scope
+  stops to the rules motion has to meet.
 
 The keys and config pages are generated from bushel's own source on every
 release, so neither can drift from the binary you are running.

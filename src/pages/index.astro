@@ -8,7 +8,7 @@ import Colophon from "../components/Colophon.astro";
 const INSTALL = "curl -LsSf https://bushel.sh/install | sh";
 
 const description =
-  "bushel manages the containers, images and volumes already on your Mac. One rail for all three, live telemetry on the selection, and the exact container command shown before anything destructive runs.";
+  "bushel manages the containers, images and volumes already on your Mac. All three sit on one rail with live telemetry on whatever you have selected, and anything destructive shows you the exact container command before it runs.";
 
 const features = [
   {
@@ -19,12 +19,12 @@ const features = [
   {
     no: "02",
     head: ["Telemetry on", "the selection"],
-    body: "CPU and memory sparklines with network and disk rates, sampled every poll tick. No dashboard, no configuration.",
+    body: "CPU and memory sparklines with network and disk rates, sampled every poll tick. There is nothing to configure and no dashboard to open.",
   },
   {
     no: "03",
     head: ["The command,", "before it runs"],
-    body: 'Delete, prune and kill each show the exact <span class="mono">container …</span> line in the confirmation. Nothing destructive happens off-screen.',
+    body: 'Delete, prune and kill each show the exact <span class="mono">container …</span> line in the confirmation, so you read what will run before you agree to it.',
   },
   {
     no: "04",
@@ -39,13 +39,13 @@ const features = [
   {
     no: "06",
     head: ["Motion you", "never wait on"],
-    body: 'Every animation is 150 ms or less, interruptible, and never delays data or input. <span class="mono">--reduced-motion</span> turns all of it off.',
+    body: 'Every animation caps at 150 ms and yields to input, and none of them delay data or keystrokes. <span class="mono">--reduced-motion</span> turns all of it off.',
   },
 ];
 ---
 
 <Base
-  title="bushel — a terminal UI for Apple Containers"
+  title="bushel: a terminal UI for Apple Containers"
   description={description}
 >
   <a class="skip-link" href="#main">Skip to content</a>
@@ -63,9 +63,10 @@ const features = [
 
           <p class="hero-lede">
             bushel manages the containers, images and volumes already on your
-            Mac. All three on one rail, live telemetry on the selection, and the
-            exact <span class="mono">container</span> command shown before
-            anything destructive runs.
+            Mac. All three sit on one rail with live telemetry on whatever you
+            have selected, and anything destructive shows you the exact <span
+              class="mono">container</span
+            > command before it runs.
           </p>
 
           <Command command={INSTALL} />
@@ -103,7 +104,7 @@ const features = [
                 <span style="background:#e3b341"></span>
                 <span style="background:#7ee787"></span>
               </span>
-              <span class="terminal-title">bushel — recorded session</span>
+              <span class="terminal-title">bushel · recorded session</span>
               <button
                 type="button"
                 class="terminal-toggle"
@@ -122,7 +123,7 @@ const features = [
               width="1200"
               height="760"
               poster="/demo/bushel-demo-poster.jpg"
-              aria-label="A recorded bushel session: the rail of running containers with live CPU and memory, the detail pane following a worker's logs, then a container stopped and started again — each confirmed with the exact container command."
+              aria-label="A recorded bushel session: the rail of running containers with live CPU and memory, the detail pane following a worker's logs, then a container stopped and started again, each confirmed with the exact container command."
             >
               <source src="/demo/bushel-demo.webm" type="video/webm" />
               <source src="/demo/bushel-demo.mp4" type="video/mp4" />
@@ -154,7 +155,7 @@ const features = [
           </div>
 
           <figcaption class="demo-caption">
-            [ A real session — the rail, log follow, and a confirmed stop and
+            [ A real session: the rail, log follow, and a confirmed stop and
             start ]
           </figcaption>
         </figure>
@@ -170,7 +171,7 @@ const features = [
         </p>
 
         <h2 class="band-heading" id="features-heading">
-          A manager,<br class="br-wide" /> not a launcher.
+          For the containers<br class="br-wide" /> you already have.
         </h2>
 
         <p class="band-lede">
@@ -250,17 +251,17 @@ const features = [
               class="mono">~/.cargo/bin</span
             >). <span class="mono">BUSHEL_INSTALL_DIR</span> picks another prefix;
             <span class="mono">BUSHEL_NO_MODIFY_PATH=1</span> leaves your shell rc
-            alone. The script is the checksummed release asset on GitHub — bushel.sh/install
-            only redirects to it.
+            alone. The script is the checksummed release asset on GitHub, and
+            bushel.sh/install only redirects to it.
           </p>
           <p>
             bushel isn't on crates.io, so the cargo install needs <span
               class="mono">--git</span
             >. <strong>Upgrading:</strong> run <span class="mono"
               >bushel update</span
-            >. It knows how it was installed — shell installs replace themselves
+            >. It works out how it was installed: shell installs replace themselves
             in place, Homebrew hands off to <span class="mono">brew upgrade</span
-            >, and cargo, Nix or hand-placed binaries are told what to run
+            >, and cargo, Nix or a hand-placed binary get told what to run
             instead.
           </p>
         </div>

@@ -1,6 +1,6 @@
 ---
 title: Install
-description: Every way to install bushel — Homebrew, the shell installer, cargo, or the archive by hand — plus the environment knobs and how each install upgrades.
+description: Every way to install bushel (Homebrew, the shell installer, cargo, or the archive by hand), plus the environment knobs and how each install upgrades.
 lede: Four ways in, and the upgrade path that comes with each one.
 ---
 
@@ -17,13 +17,13 @@ lands.
 ## What bushel needs
 
 **macOS 26 on Apple silicon.** The only archive published is
-`aarch64-apple-darwin`, and an Intel Mac has nothing to run either way — Apple's
-container runtime is Apple silicon only.
+`aarch64-apple-darwin`, and an Intel Mac has nothing to run either way, since
+Apple's container runtime is Apple silicon only.
 
 **Apple's [`container`](https://github.com/apple/container) CLI.** bushel shells
 out to it and finds it on `PATH`; Apple's installer puts it in `/usr/local/bin`.
 Versions are checked at startup against `1.2.x`, the range bushel's fixtures
-were captured on. Anything else raises a dismissable banner and still runs — the
+were captured on. Anything else raises a dismissable banner and still runs. The
 CLI only promises stable output within a patch series, so a different minor may
 have moved the JSON bushel reads.
 
@@ -43,10 +43,10 @@ part of every release, so it is never behind the GitHub release.
 curl -LsSf https://bushel.sh/install | sh
 ```
 
-No Homebrew, no Rust toolchain. `bushel.sh/install` is a 302 to
-`bushel-installer.sh` attached to the latest GitHub release — this domain never
-hosts a copy of the script, so what you run is always the checksummed asset
-sitting next to the archive it installs.
+This needs neither Homebrew nor a Rust toolchain. `bushel.sh/install` is a 302
+to `bushel-installer.sh` attached to the latest GitHub release. This domain
+never hosts a copy of the script, so what you run is always the checksummed
+asset sitting next to the archive it installs.
 
 ### Where it puts things
 
@@ -69,9 +69,9 @@ source "$HOME/.cargo/env"
 
 ### `BUSHEL_INSTALL_DIR`
 
-Installs somewhere else. It names a **prefix**, not the directory the binary
-lands in — the binary goes to `$BUSHEL_INSTALL_DIR/bin` and the env script to
-`$BUSHEL_INSTALL_DIR/env`, the same layout as `$CARGO_HOME`.
+Installs somewhere else. It names a **prefix** in the `$CARGO_HOME` layout, so
+the binary goes to `$BUSHEL_INSTALL_DIR/bin` and the env script to
+`$BUSHEL_INSTALL_DIR/env`.
 
 ```sh
 curl -LsSf https://bushel.sh/install | BUSHEL_INSTALL_DIR="$HOME/.local" sh
@@ -124,9 +124,9 @@ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/frankieramirez/bushel/r
 cargo install --git https://github.com/frankieramirez/bushel
 ```
 
-bushel is not published to crates.io, so `--git` is required rather than
-optional. This builds locally and needs a Rust toolchain — 1.85 or newer, since
-the crate is on the 2024 edition.
+bushel is not published to crates.io, so `--git` is required. This builds
+locally and needs a Rust toolchain, 1.85 or newer, since the crate is on the
+2024 edition.
 
 No receipt is written this way, which is what later tells `bushel update` to
 hand the job back to cargo instead of replacing the binary itself.
@@ -137,8 +137,8 @@ Every release carries `bushel-aarch64-apple-darwin.tar.xz` with a matching
 `.sha256`, plus a combined `sha256.sum` covering every asset. Unpack it and put
 the binary anywhere on `PATH`.
 
-Nothing records that you did this, so `bushel update` will say so rather than
-guess.
+Nothing records that you did this, so `bushel update` will say so instead of
+guessing.
 
 ## Upgrading
 
@@ -147,8 +147,8 @@ bushel update
 ```
 
 Every install method owns the binaries it placed, so `update` works out which
-one you used — from where the running binary sits, then from whether a receipt
-exists — and hands the work back rather than self-replacing behind its back:
+one you used, first from where the running binary sits and then from whether a
+receipt exists, then hands the work back to it:
 
 - **Shell installer.** Replaces itself in place from the latest GitHub release,
   printing the new version. Already current, and it says
@@ -162,7 +162,7 @@ exists — and hands the work back rather than self-replacing behind its back:
   than one line of output.
 - **Nix.** Refuses. The store is read-only and the derivation is the source of
   truth, so the flake or channel that provides bushel is the thing to update.
-- **Anything else.** `no install receipt found` — upgrade with whatever placed
+- **Anything else.** `no install receipt found`. Upgrade with whatever placed
   the binary, or reinstall with the shell installer.
 
 The shell installer's default prefix is `$CARGO_HOME` too, so the path alone
@@ -171,12 +171,12 @@ them.
 
 ## Uninstall
 
-Homebrew installs come off with `brew uninstall bushel`. For the rest, there is
-no uninstaller — remove what the installer wrote:
+Homebrew installs come off with `brew uninstall bushel`. For the rest there is
+no uninstaller, so remove what the installer wrote:
 
 - The binary, wherever it landed (`which bushel`).
 - The receipt, `~/.config/bushel/bushel-receipt.json`.
-- The `env` script beside the binary, and the line sourcing it in your rc files
-  — only if nothing else you installed shares that directory.
+- The `env` script beside the binary, and the line sourcing it in your rc
+  files, but only if nothing else you installed shares that directory.
 - Your config, `~/.config/bushel/config.toml`, and the `.launched` marker beside
   it that records a first run has happened.
