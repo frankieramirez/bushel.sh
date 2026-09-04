@@ -22,21 +22,24 @@ const example = config.options
 
 const headings = [
   { depth: 2, slug: "options", text: "Options" },
+  { depth: 2, slug: "layouts-and-settings", text: "Layouts and settings" },
   { depth: 2, slug: "flags-and-the-file", text: "Flags and the file" },
+  { depth: 2, slug: "config-directory", text: "Config directory" },
 ];
 ---
 
 <Docs
   title="Config"
   description="bushel's config file options, their defaults, and the flags that set the same things."
-  lede="Three switches, a file that holds them, and the flags that set the same things."
+  lede="Four options, a file that holds them, and the flags that set the same things."
   headings={headings}
 >
   <p>
-    bushel reads <code>{config.path}</code>, which holds exactly what the flags
-    can also set. The file is optional and every key below is optional inside it.
-    This page is generated from bushel v{version}, so the defaults are the ones
-    the binary actually starts with.
+    bushel reads <code>{config.path}</code>, which holds the same options the
+    command-line flags set. The file is optional and every key below is optional
+    inside it. Set <code>BUSHEL_CONFIG_DIR</code> to move the directory that
+    contains <code>config.toml</code>. This page is generated from bushel v{version},
+    so the defaults are the ones the binary actually starts with.
   </p>
 
   <p>Writing out the defaults gives you a file that changes nothing:</p>
@@ -76,12 +79,43 @@ const headings = [
     </table>
   </div>
 
+  <h2 id="layouts-and-settings">Layouts and settings</h2>
+
+  <p>
+    <code>rail</code> is the default: all four panes remain visible, with the
+    active one expanded beside the detail pane. In narrow terminals the rail
+    moves above the detail. <code>table</code> puts one full-width table above
+    one full-width detail pane at every size. Both use the same pane and action keys.
+  </p>
+
+  <pre><code>bushel --layout table</code></pre>
+
+  <p>
+    Press <code>,</code> to open settings. Move between rows with
+    <code>j</code>/<code>k</code> or the up/down arrows, then press
+    <code>enter</code> or <code>space</code> to change the selected setting.
+    Changes apply immediately and are saved for future launches. Close the panel
+    with <code>esc</code>, <code>q</code> or <code>,</code>.
+  </p>
+
   <h2 id="flags-and-the-file">Flags and the file</h2>
 
   <p>
-    A flag can only switch something on. bushel ORs each flag with the file's
-    value, so <code>reduced_motion = true</code> in the file stays on whatever
-    you pass on the command line, and turning it back off means editing the file.
+    The three boolean flags, <code>--no-splash</code>,
+    <code>--reduced-motion</code>, and <code>--ascii</code>, are ORed with the
+    values in the file at startup. A true value in the file stays true when you
+    omit its flag. Edit the file or use the settings panel to turn it off.
+  </p>
+
+  <p>
+    <code>--layout</code> takes <code>rail</code> or <code>table</code> and
+    replaces the file's layout for that run. For example,
+    <code>bushel --layout table</code> uses the full-width table without changing
+    <code>layout = "rail"</code> in the file. Changing a setting in the panel
+    saves that choice while keeping the other saved option values. For example,
+    launching with <code>--ascii</code> and changing the layout does not save
+    the temporary ASCII override. Saving rewrites the config file, so comments
+    and unknown keys are not preserved.
   </p>
 
   <p>
@@ -91,5 +125,22 @@ const headings = [
     to defaults for all of it.
     <a href="/docs/troubleshooting#settings-that-do-nothing">Troubleshooting</a>
     has both.
+  </p>
+
+  <h2 id="config-directory">Config directory</h2>
+
+  <p>
+    <code>BUSHEL_CONFIG_DIR</code> changes the directory used for
+    <code>config.toml</code> and the <code>.launched</code> first-run marker.
+    For example, this keeps a separate set of preferences:
+  </p>
+
+  <pre><code>BUSHEL_CONFIG_DIR="$HOME/.config/bushel-work" bushel</code></pre>
+
+  <p>
+    The settings panel shows the path it saves to. This override does not move
+    the shell installer's update receipt; that receipt uses
+    <code>XDG_CONFIG_HOME</code>. If a save fails, the change still applies in
+    the current session and the message log records the error.
   </p>
 </Docs>

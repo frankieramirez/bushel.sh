@@ -33,9 +33,8 @@ have moved the JSON bushel reads.
 brew install frankieramirez/tap/bushel
 ```
 
-The formula is published to
-[frankieramirez/homebrew-tap](https://github.com/frankieramirez/homebrew-tap) as
-part of every release, so it is never behind the GitHub release.
+The release workflow publishes the formula to
+[frankieramirez/homebrew-tap](https://github.com/frankieramirez/homebrew-tap).
 
 ## Shell installer
 
@@ -115,21 +114,104 @@ Each installer is built for its own release and installs exactly that version,
 so pinning is a matter of naming the tag instead of `latest`:
 
 ```sh
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/frankieramirez/bushel/releases/download/v0.3.1/bushel-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/frankieramirez/bushel/releases/download/v0.3.4/bushel-installer.sh | sh
 ```
 
 ## From source
 
 ```sh
+cargo install bushel
+```
+
+The [published crate](https://crates.io/crates/bushel) builds locally and needs
+a Rust toolchain. The crate declares Rust 1.85 as its minimum; use a current
+stable toolchain to satisfy its dependencies.
+
+This install has no receipt. `bushel update` therefore prints a cargo command
+instead of replacing the binary itself:
+
+```sh
+cargo install --git https://github.com/frankieramirez/bushel --force
+```
+
+That command builds the GitHub source. To stay on crates.io releases, run
+`cargo install bushel --force` yourself.
+
+To build the current GitHub source directly:
+
+```sh
 cargo install --git https://github.com/frankieramirez/bushel
 ```
 
-bushel is not published to crates.io, so `--git` is required. This builds
-locally and needs a Rust toolchain, 1.85 or newer, since the crate is on the
-2024 edition.
+## Shell completions and the man page
 
-No receipt is written this way, which is what later tells `bushel update` to
-hand the job back to cargo instead of replacing the binary itself.
+`bushel --help` lists commands and options without opening the UI.
+`bushel --version` prints the installed version.
+
+The release assets include generated completion scripts for Bash, Zsh and Fish,
+plus `bushel.1`:
+
+- [`bushel.bash`](https://github.com/frankieramirez/bushel/releases/latest/download/bushel.bash)
+- [`bushel.zsh`](https://github.com/frankieramirez/bushel/releases/latest/download/bushel.zsh)
+- [`bushel.fish`](https://github.com/frankieramirez/bushel/releases/latest/download/bushel.fish)
+- [`bushel.1`](https://github.com/frankieramirez/bushel/releases/latest/download/bushel.1)
+
+Generate completions from your installed binary to match its commands and
+flags. The downloaded assets follow the latest release instead.
+
+### Bash
+
+Load completions for the current shell:
+
+```bash
+source <(bushel completions bash)
+```
+
+To load them in new interactive Bash sessions, add that line to `~/.bashrc`
+(and make sure your Bash login profile sources that file).
+
+### Zsh
+
+Save the script in a directory you own:
+
+```zsh
+mkdir -p "$HOME/.zfunc"
+bushel completions zsh > "$HOME/.zfunc/_bushel"
+```
+
+Add the directory to `fpath` in `~/.zshrc`, before any existing `compinit` call.
+If your configuration doesn't initialize completions yet, use the whole block:
+
+```zsh
+fpath=("$HOME/.zfunc" $fpath)
+autoload -Uz compinit
+compinit
+```
+
+Start a new Zsh session to load it.
+
+### Fish
+
+```fish
+mkdir -p "$__fish_config_dir/completions"
+bushel completions fish > "$__fish_config_dir/completions/bushel.fish"
+```
+
+Fish loads the file when completing `bushel` in a new session.
+
+### Man page
+
+Download the generated man page into a user-owned directory, then read it with
+an explicit man path:
+
+```sh
+mkdir -p "$HOME/.local/share/man/man1"
+curl -LsSf https://github.com/frankieramirez/bushel/releases/latest/download/bushel.1 \
+  -o "$HOME/.local/share/man/man1/bushel.1"
+man -M "$HOME/.local/share/man" bushel
+```
+
+If that directory is already on your man path, `man bushel` is enough.
 
 ## The archive, by hand
 
@@ -152,9 +234,9 @@ receipt exists, then hands the work back to it:
 
 - **Shell installer.** Replaces itself in place from the latest GitHub release,
   printing the new version. Already current, and it says
-  `bushel 0.3.1 is already up to date` instead.
-- **Homebrew.** Runs `brew upgrade bushel` for you, telling you that is what it
-  is doing. Running `brew upgrade bushel` yourself is the same thing.
+  `bushel 0.3.4 is already up to date` instead.
+- **Homebrew.** Refreshes the tap before running `brew upgrade bushel`, even
+  when normal Homebrew auto-updates are disabled.
 - **cargo.** Prints the command and stops:
   `cargo install --git https://github.com/frankieramirez/bushel --force`. It
   will not run it, because cargo cannot tell a new version from the current one
@@ -179,4 +261,6 @@ no uninstaller, so remove what the installer wrote:
 - The `env` script beside the binary, and the line sourcing it in your rc
   files, but only if nothing else you installed shares that directory.
 - Your config, `~/.config/bushel/config.toml`, and the `.launched` marker beside
-  it that records a first run has happened.
+  it that records a first run has happened. If `BUSHEL_CONFIG_DIR` is set, both
+  are in that directory instead. The receipt follows `XDG_CONFIG_HOME`,
+  independently of this override.

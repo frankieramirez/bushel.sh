@@ -10,10 +10,7 @@
  * The copy in `src/data/docs.json` is what renders when the fetch fails, and
  * refreshing it is one command on a Mac with the bushel checkout:
  *
- *     cargo run --example docs-json -- --out src/data/docs.json
- *
- * It is also what renders *today*: the release workflow only started attaching
- * the asset after v0.3.1, so the URL below 404s until the next tag.
+ *     cargo run --example docs-json -- --out ../bushel.sh/src/data/docs.json
  */
 import fallback from "../data/docs.json";
 
@@ -44,7 +41,7 @@ export interface KeyGroup {
 export interface ConfigOption {
   key: string;
   flag: string;
-  /** Whatever `Config::default()` serialises to. Bools today. */
+  /** Whatever `Config::default()` serialises to, including the layout name. */
   default: boolean | number | string;
   desc: string;
 }

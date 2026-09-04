@@ -58,18 +58,29 @@ fails, and again when a release's `schema_version` has moved ahead of the
 `SCHEMA_VERSION` this site knows how to render. The build log carries a
 `[docs.json]` line saying which copy won and why.
 
-The release workflow only started attaching the asset after v0.3.1, so the fetch
-404s today and every build serves the vendored copy. Refresh it from a Mac with
-the bushel checkout:
+The bundled reference currently matches bushel v0.3.4. Refresh it from the
+bushel checkout when updating the site for a release:
 
 ```sh
 cargo run --example docs-json -- --out ../bushel.sh/src/data/docs.json
 ```
 
-Pages only rebuilds on a push here, so a bushel release would leave the chip and
-the tables a version behind. `deploy-site.yml` on the bushel repo closes that
-loop, firing the `BUSHEL_SH_DEPLOY_HOOK` deploy hook after a stable release
-announces.
+`deploy-site.yml` in the bushel repo triggers the `BUSHEL_SH_DEPLOY_HOOK` after
+a stable release announces, rebuilding the site with that release's tables.
+The generated pages show the data's version, which may differ from an older
+binary a reader has installed.
+
+The handwritten guides still need a release review. Compare the CLI, config,
+key dispatcher and available actions with the overview, install, usage, keys,
+config, troubleshooting and why pages. Check the homepage claims too. New
+subcommands, environment variables and dialog controls are not included in
+`docs.json`; document them explicitly. Completion scripts and `bushel.1` are
+linked from the install page to the release assets.
+
+After updating the bundled reference and guides, run `npm run build`. Check the
+`[docs.json]` line for the source and version used, then preview the pages at
+desktop and phone widths. A build that falls back can still succeed, so compare
+the bundled version with the intended release before publishing.
 
 ## The demo
 

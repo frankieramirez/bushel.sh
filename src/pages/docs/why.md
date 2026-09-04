@@ -1,6 +1,6 @@
 ---
 title: Why
-description: Why bushel is a TUI for Apple Containers, where its scope stops, why one rail at every size, and why it moves.
+description: Why bushel is a TUI for Apple Containers, where its scope stops, and how its layouts and motion work.
 lede: The arguments behind the shape, from where the scope stops to the rules motion has to meet.
 ---
 
@@ -17,8 +17,8 @@ could have typed yourself.
 
 ## Where the scope stops
 
-Containers are born on the command line and managed in bushel. There is no
-`run` or `create` dialog, on purpose.
+Create containers with `container run` or `container create`, then manage them
+in bushel.
 
 A creation dialog is a second CLI, and a worse one. Image reference, tag, name,
 ports, mounts, environment, entrypoint, resource limits: reproducing that as
@@ -28,16 +28,18 @@ repeats, watching and reading logs and stopping something and cleaning up after
 it, is the part no CLI makes pleasant. bushel takes that half and leaves the
 other alone.
 
-The same instinct sets the rest of the boundary. Image building, registry login,
-a networks pane and compose emulation are all out. So is `container system
-stop`, a kill-every-container footgun one keystroke away from something
-harmless. Prune is the only bulk operation, because the CLI already implements
-prune and it is the bulk operation people actually want.
+Image pulls and tags fit in a single input, as does creating a named volume.
+bushel supports those operations and lets you inspect existing networks.
+Network creation and deletion, image building, registry login, compose
+emulation and `container system stop` remain command-line work. Prune is the
+only bulk operation. [Using bushel](/docs/usage) covers the available actions.
 
 ## The command, before it runs
 
 Delete, prune and kill each show the exact `container …` line in their
-confirmation, and nothing destructive runs without one.
+confirmation. Image tagging and volume creation also show a command preview.
+Press `y` to run it, or `n` or `esc` to cancel. Starting, stopping and restarting
+a container run directly from their action keys.
 
 Partly this is the obvious safety argument: a confirmation that says *are you
 sure* adds nothing you did not already know, while one that says
@@ -50,9 +52,11 @@ Actions that fail write the full stderr to the [message
 log](/docs/troubleshooting), behind the one-line gist in the status bar, so
 nothing gets swallowed.
 
-## One rail, at every size
+<span id="one-rail-at-every-size"></span>
 
-The rail is the column holding all three panes: containers, images, volumes.
+## Choose a rail or a table
+
+The default rail holds four panes: containers, images, volumes and networks.
 Inactive panes collapse to a name or a count; the active one takes the space
 that is left.
 
@@ -62,17 +66,17 @@ same complaint. Logs are unreadable in a 60-column detail pane, and on a
 200-column terminal most of that width goes to container names nobody needs that
 much room for.
 
-The obvious fix is a mode split: tabs below some width, a rail above it. bushel
-rejects that, because it means two interaction models to learn and a width at
-which the tool you are using turns into a different tool. So the rail is always
-the rail, and the only thing size decides is where it sits: beside the detail
-pane at 80 body columns or more, above it when narrower. It never grows past 36
-columns wide, since spare width is worth more to logs.
+The rail sits beside the detail pane at 80 body columns or more, and above it
+when narrower. It never grows past 36 columns wide, leaving spare width to logs.
+For longer names or a wider overview of the active pane, table mode puts one
+full-width table above one full-width detail pane.
 
-`1`, `2` and `3` expand a pane and leave the others in place, and zoom
-fullscreens the active panel's table on its own. At 22 rows or 60 columns and
-below bushel keeps drawing and starts shedding chrome instead: table headers,
-the tab row, the status cluster.
+Press `,` to choose the layout in settings, or start with `bushel --layout table`.
+Resizing the terminal keeps your chosen mode. The pane keys `1` through `4`
+work in both layouts; `f` zooms the focused list or detail. At 22 rows or 60
+columns and below, bushel saves space by hiding table headers and the detail
+tab row, along with the status cluster. The [config page](/docs/config) explains
+which settings are saved.
 
 ## Motion, with rules
 
@@ -92,11 +96,11 @@ disable, and any future animation that cannot meet them does not ship.
 ## Polling, and saying so
 
 Apple Containers has no event API, so a periodic poll is the only refresh model
-available. bushel is honest about what that costs. Three consecutive polls
+available. bushel is honest about what that costs. Three consecutive container polls
 returning output it cannot parse will keep the last good list on screen and turn
 on a banner saying the rows are stale, which beats blanking the list or showing
-fresh-looking lies. If the `container` binary is missing entirely, an empty rail
-is the accurate answer, and the reason is in the message log.
+fresh-looking lies. If the `container` binary is missing entirely, the panes stay
+empty and the reason is in the message log.
 
 The same reasoning keeps telemetry small: CPU and memory sparklines with network
 and disk rates, sampled on the poll tick, attached to the selected container.
@@ -109,10 +113,12 @@ to be one.
 bushel's design was worked out in the open, one decision at a time, on GitHub:
 the [v0.1 map](https://github.com/frankieramirez/bushel/issues/1) and the
 [responsive visual UI map](https://github.com/frankieramirez/bushel/issues/14).
-The two decisions above that outlived their tickets are written up as ADRs:
+The design decisions are written up as ADRs:
 [motion-first](https://github.com/frankieramirez/bushel/blob/main/docs/adr/0001-motion-first-tui.md)
-and [the unified
+and [the original unified
 rail](https://github.com/frankieramirez/bushel/blob/main/docs/adr/0002-unified-rail.md).
+The later [two-layout decision](https://github.com/frankieramirez/bushel/blob/main/docs/adr/0003-two-layouts-one-toggle.md)
+adds the table option.
 
 bushel is MIT licensed, which was also a choice: the deepest tool in this niche
 is GPL, and that is a real constraint on who can borrow from it.

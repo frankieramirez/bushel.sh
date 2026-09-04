@@ -8,13 +8,13 @@ import Colophon from "../components/Colophon.astro";
 const INSTALL = "curl -LsSf https://bushel.sh/install | sh";
 
 const description =
-  "bushel manages the containers, images and volumes already on your Mac. All three sit on one rail with live telemetry on whatever you have selected, and anything destructive shows you the exact container command before it runs.";
+  "Browse Apple containers, images, volumes and networks in bushel. Choose a rail or table layout, watch live container telemetry, and review destructive commands before they run.";
 
 const features = [
   {
     no: "01",
-    head: ["One rail,", "all three"],
-    body: "Containers, images and volumes stay on screen together. The active pane takes the space; the others collapse to a name or a count.",
+    head: ["Four panes,", "two layouts"],
+    body: 'Keep containers, images, volumes and networks together on a rail, or give the active table the full width. Press <span class="mono">,</span> to change layouts and save your preference.',
   },
   {
     no: "02",
@@ -57,16 +57,16 @@ const features = [
     <section class="hero">
       <div class="wrap">
         <div class="hero-copy">
-          <p class="eyebrow">Containers · Images · Volumes</p>
+          <p class="eyebrow">Containers · Images · Volumes · Networks</p>
 
           <h1>A terminal UI<br />for <em>Apple<br />Containers</em></h1>
 
           <p class="hero-lede">
-            bushel manages the containers, images and volumes already on your
-            Mac. All three sit on one rail with live telemetry on whatever you
-            have selected, and anything destructive shows you the exact <span
+            Browse containers, images, volumes and networks on your Mac, with
+            live telemetry for the selected container. Choose a rail or table
+            layout, and review destructive <span
               class="mono">container</span
-            > command before it runs.
+            > commands before they run.
           </p>
 
           <Command command={INSTALL} />
@@ -117,7 +117,7 @@ const features = [
               width="1200"
               height="760"
               poster="/demo/bushel-demo-poster.jpg"
-              aria-label="A recorded bushel session: the rail of running containers with live CPU and memory, the detail pane following a worker's logs, then a container stopped and started again, each confirmed with the exact container command."
+              aria-label="A recorded bushel session showing the rail, live container telemetry, log follow, and container actions."
             >
               <source src="/demo/bushel-demo.webm" type="video/webm" />
               <source src="/demo/bushel-demo.mp4" type="video/mp4" />
@@ -149,8 +149,8 @@ const features = [
           </div>
 
           <figcaption class="demo-caption">
-            A real session: the rail, log follow, and a confirmed stop and
-            start
+            A recorded rail session with log follow and container actions.
+            See <a href="/docs/usage">Using bushel</a> for the current workflows.
           </figcaption>
         </figure>
       </div>
@@ -169,8 +169,8 @@ const features = [
         </h2>
 
         <p class="band-lede">
-          Containers are born on the command line. bushel manages what already
-          exists, and does it without hiding what it is doing.
+          Create containers on the command line, then manage them here. Pull
+          and tag images, create named volumes, and inspect existing networks.
         </p>
 
         <div class="features">
@@ -222,9 +222,9 @@ const features = [
           </div>
 
           <div class="method">
-            <span class="method-label">From source</span>
+            <span class="method-label">Cargo</span>
             <Command
-              command="cargo install --git https://github.com/frankieramirez/bushel"
+              command="cargo install bushel"
               compact
             />
           </div>
