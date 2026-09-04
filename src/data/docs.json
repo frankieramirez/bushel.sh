@@ -1,17 +1,21 @@
 {
   "schema_version": 1,
-  "version": "0.3.1",
+  "version": "0.3.4",
   "keymap": [
     {
       "group": "global",
       "bindings": [
         {
-          "keys": "1/2/3, tab",
-          "desc": "expand pane (containers / images / volumes)"
+          "keys": "1/2/3/4, tab",
+          "desc": "expand pane (containers / images / volumes / networks)"
         },
         {
           "keys": "f",
           "desc": "zoom focused side"
+        },
+        {
+          "keys": ",",
+          "desc": "settings (layout, glyphs, motion, splash)"
         },
         {
           "keys": "m",
@@ -53,6 +57,14 @@
         {
           "keys": "u",
           "desc": "pull image (images pane)"
+        },
+        {
+          "keys": "t",
+          "desc": "tag image (images pane)"
+        },
+        {
+          "keys": "c",
+          "desc": "create volume (volumes pane)"
         }
       ]
     },
@@ -102,6 +114,12 @@
         "flag": "--ascii",
         "default": false,
         "desc": "ASCII icons and spinners (no Unicode glyphs)"
+      },
+      {
+        "key": "layout",
+        "flag": "--layout",
+        "default": "rail",
+        "desc": "Body layout: rail keeps all four panes in view, table gives one full-width table"
       }
     ]
   }

@@ -1,18 +1,19 @@
 ---
 title: Overview
-description: Documentation for bushel, a terminal UI for the containers, images and volumes already on your Mac.
+description: Documentation for bushel, a terminal UI for Apple containers, images, volumes and networks.
 lede: What bushel is, and where to go next.
 ---
 
 bushel is a terminal UI for [Apple
-Containers](https://github.com/apple/container). It manages the containers,
-images and volumes already on your Mac. All three sit on one rail with live
-telemetry on whatever is selected, and anything destructive shows you the exact
-`container …` command before it runs.
+Containers](https://github.com/apple/container). Browse containers, images,
+volumes and networks in four panes, with live telemetry for the selected
+container. Choose a rail beside the detail pane or a full-width table above it.
+Delete, prune and kill show the exact `container …` command before you confirm.
 
-It wraps Apple's `container` CLI as a subprocess and manages what already
-exists. Containers are born on the command line; bushel is the part that comes
-after. [Why it is shaped that way](/docs/why) is its own page.
+It wraps Apple's `container` CLI as a subprocess. Create containers on the
+command line, then use bushel to manage them. You can also pull and tag images,
+create named volumes, and inspect existing networks. [Why it is shaped that
+way](/docs/why) explains the scope.
 
 ## Requirements
 
@@ -33,18 +34,22 @@ does for each method.
 ## Where to go next
 
 - **[Install](/docs/install)**: every install method, and how each one
-  upgrades.
+  upgrades, plus shell completions and the man page.
+- **[Using bushel](/docs/usage)**: navigate the panes, read logs, and manage
+  containers, images and volumes. Networks are available for inspection.
 - **[Keys](/docs/keys)**: the full keymap, generated from the cheatsheet bushel
   ships. Press `?` for the same list without leaving the terminal.
-- **[Config](/docs/config)**: the three options in
-  `~/.config/bushel/config.toml` and the flags that override them.
+- **[Config](/docs/config)**: layouts, the settings panel, and the four options
+  in `~/.config/bushel/config.toml`, including how flags override them.
 - **[Troubleshooting](/docs/troubleshooting)**: what to do when bushel will not
   start, shows nothing, or refuses an action.
 - **[Why](/docs/why)**: the arguments behind the shape, from where the scope
   stops to the rules motion has to meet.
 
-The keys and config pages are generated from bushel's own source on every
-release, so neither can drift from the binary you are running.
+The key and config tables come from the latest release's generated reference
+at site build time. Each page names that version; compare it with
+`bushel --version` if you run an older binary. If release data cannot be fetched,
+the site uses its bundled reference and displays that copy's version.
 
 ## Reporting something broken
 

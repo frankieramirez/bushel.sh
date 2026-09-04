@@ -1,5 +1,5 @@
 /**
- * The docs table of contents — the one place the six pages are listed.
+ * The docs table of contents, shared by the navigation and index.
  *
  * The sidebar, the mobile ribbon and the docs index all read this array, so
  * adding a page means adding an entry here and dropping the file in
@@ -33,28 +33,34 @@ export const DOCS_PAGES: DocsPage[] = [
     no: "02",
     title: "Install",
     href: "/docs/install",
-    summary: "Every install method, the environment knobs, and how to upgrade.",
+    summary: "Install, upgrade, shell completions, and the man page.",
   },
   {
     no: "03",
-    title: "Keys",
-    href: "/docs/keys",
-    summary: "The full keymap, generated from bushel's own cheatsheet.",
+    title: "Using bushel",
+    href: "/docs/usage",
+    summary: "Navigate the panes and work with containers, images, volumes and networks.",
   },
   {
     no: "04",
-    title: "Config",
-    href: "/docs/config",
-    summary: "Config file options and the CLI flags that override them.",
+    title: "Keys",
+    href: "/docs/keys",
+    summary: "The generated cheatsheet and controls for dialogs and settings.",
   },
   {
     no: "05",
+    title: "Config",
+    href: "/docs/config",
+    summary: "Layouts, saved settings, and the flags that override the file.",
+  },
+  {
+    no: "06",
     title: "Troubleshooting",
     href: "/docs/troubleshooting",
     summary: "What to do when bushel will not start, connect, or draw.",
   },
   {
-    no: "06",
+    no: "07",
     title: "Why",
     href: "/docs/why",
     summary: "Why a TUI for Apple Containers, and the arguments behind its shape.",

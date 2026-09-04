@@ -24,20 +24,21 @@ const headings = keymap.map((g) => ({
   slug: slug(g.group),
   text: g.group,
 }));
+headings.push({ depth: 2, slug: "contextual-keys", text: "Contextual keys" });
 ---
 
 <Docs
   title="Keys"
-  description="Every key binding bushel answers, generated from its own cheatsheet."
-  lede="Every binding bushel answers, in the groups its own cheatsheet uses."
+  description="bushel's generated cheatsheet, plus controls for prompts, settings and other screens."
+  lede="Every binding in bushel's help overlay, plus the keys used by its other prompts."
   headings={headings}
 >
   <p>
-    Press <code>?</code> inside bushel for this same list without leaving the terminal,
-    and <code>esc</code> or <code>q</code> to close it again. Neither key appears
-    below, because the cheatsheet does not list the keys that open and close it,
-    though everything else is there. This page is generated from bushel v{version},
-    from the cheatsheet the overlay draws, so the two cannot disagree.
+    Press <code>?</code> inside bushel for this same list without leaving the terminal.
+    The table is generated from bushel v{version} and matches the rows in its help
+    overlay. The overlay closes with <code>esc</code>, <code>q</code>,
+    <code>?</code>, or <code>m</code>; <code>q</code> and <code>esc</code> also
+    appear in the global and detail rows below.
   </p>
 
   {
@@ -69,7 +70,7 @@ const headings = keymap.map((g) => ({
   }
 
   <p>
-    The groups name what a binding acts on, and you never have to be in one.
+    The groups describe what each binding acts on.
     <code>j</code>/<code>k</code> and <code>g</code>/<code>G</code> move the
     selection while the list is focused, then scroll the detail pane once
     <code>enter</code> has moved focus there. <code>l</code> and <code>i</code>
@@ -78,8 +79,34 @@ const headings = keymap.map((g) => ({
     toggles.
   </p>
 
+  <h2 id="contextual-keys">Contextual keys</h2>
+
   <p>
-    What genuinely needs the list focused is <code>/</code>, <code>enter</code>,
+    Some keys belong to a prompt or screen instead of the help table. In a
+    confirmation prompt, <code>y</code> runs the action and <code>n</code> or
+    <code>esc</code> cancels it. Pull, tag, and create-volume dialogs accept
+    text, <code>enter</code> submits it, <code>backspace</code> deletes a
+    character, and <code>esc</code> closes the dialog.
+  </p>
+
+  <p>
+    After <code>/</code> starts a list filter, type to narrow the active pane,
+    use <code>backspace</code> to edit, <code>enter</code> to leave filter input,
+    or <code>esc</code> to clear it. In the settings panel opened with
+    <code>,</code>, <code>j</code>/<code>k</code> or the up/down arrows move between
+    rows, and <code>enter</code>, <code>space</code>, <code>h</code>,
+    <code>l</code>, or the left and right arrows change the selected setting.
+    <code>q</code>, <code>,</code>, or <code>esc</code> closes that panel.
+  </p>
+
+  <p>
+    <code>Ctrl-C</code> quits from any screen. If the container service is down,
+    <code>s</code> starts it, <code>m</code> opens the message log, and
+    <code>q</code> quits.
+  </p>
+
+  <p>
+    The keys that need the list focused are <code>/</code>, <code>enter</code>,
     <code>space</code> and the action letters. Those letters are filtered to what
     the selection can actually do, so one that appears inert usually means the
     action does not apply here. <a href="/docs/troubleshooting">Troubleshooting</a>

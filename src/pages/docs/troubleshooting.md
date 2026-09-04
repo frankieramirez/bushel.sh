@@ -64,7 +64,7 @@ answer.
 
 Look at the right-hand end of the status bar. If it reads `container ?` instead
 of a version number, bushel could not run the `container` binary at all, and
-the empty rail is the honest result of nothing having answered.
+the empty panes are the result of nothing having answered.
 
 Press `m` and you will see the real reason:
 
@@ -113,7 +113,7 @@ banner on so you know the rows are stale.
 alongside the version banner. Worth an issue if you hit it, with the offending
 output pasted in.
 
-Image and volume polls that fail never trip this banner. They only write to the
+Image, volume and network polls that fail never trip this banner. They only write to the
 message log.
 
 ## An action failed
@@ -150,6 +150,28 @@ a command in that dialog looks wrong, it is the command that will run, verbatim.
 bushel restores itself. Use the terminal directly if the image needs a different
 shell path.
 
+### A volume cannot be deleted
+
+bushel checks whether the volume is attached to a container before opening the
+delete confirmation. If it is, the toast names the containers using it and `m`
+shows the reason. Stopped containers can still hold a volume. Remove those
+containers when you no longer need them, then retry. The CLI may also refuse a
+delete if a volume became attached after bushel's last poll.
+
+### A new image tag or volume name is rejected
+
+An empty tag destination keeps the input open with an `enter a new reference`
+toast. An empty volume name closes the prompt without creating anything.
+Other naming errors come from the CLI after confirmation; press `m` for the
+full error, then open the prompt again to retry. Volume creation accepts a name
+only; mount options and container attachment belong in the CLI.
+[Using bushel](/docs/usage) shows the pull, tag and volume workflows.
+
+### Network action keys do nothing
+
+The Networks pane supports browsing, filtering and inspection. Create or
+delete networks with Apple's CLI. Container action keys do not apply there.
+
 ## The UI looks wrong
 
 ### Boxes, question marks, or missing icons
@@ -168,8 +190,10 @@ thing: bushel only uses the full 24-bit palette when `COLORTERM` contains
 
 At 22 rows or fewer, or 60 columns or fewer, the header shrinks to one row while
 the table headers, the detail tab row, the status cluster and the `l`/`i` jumps
-in the action menu all drop away to buy back space. Narrower than 80 columns,
-the rail stacks above the detail pane instead of sitting beside it.
+in the action menu all drop away to buy back space. In rail mode, narrower than
+80 body columns, the rail stacks above the detail pane instead of sitting beside
+it. Table mode always puts the active table above the detail pane. Press `,` to
+change the layout, or launch with `bushel --layout table`.
 
 Smaller again and bushel still draws. The rail and the detail pane split
 whatever rows are left, and once the rail is down to fewer than three rows the
@@ -189,14 +213,18 @@ the opening animation.
 
 ## Settings that do nothing
 
-bushel reads `~/.config/bushel/config.toml`, which holds the same three switches
-the flags set:
+bushel reads `~/.config/bushel/config.toml`, which holds four options:
 
 ```toml
 no_splash = false
 reduced_motion = false
 ascii = false
+layout = "rail"
 ```
+
+If `BUSHEL_CONFIG_DIR` is set, the file is `config.toml` in that directory
+instead. The settings panel (`,`) shows the path it saves to; the
+[config reference](/docs/config) explains the directory override.
 
 A key it does not recognise is ignored in silence. `reduce_motion` instead of
 `reduced_motion` produces no warning and no effect, so check the spelling
@@ -215,9 +243,14 @@ That prints before the UI takes over the screen, so it is easy to miss. Running
 `bushel` and quitting immediately with `q` will leave it visible in your
 scrollback.
 
-A flag can only switch something on. bushel ORs each flag with the file's
-value, so `reduced_motion = true` in the file stays on whatever you pass on the
-command line. Edit the file to turn one back off.
+The boolean flags only switch their settings on at startup. To turn one off,
+edit the file or change it in the settings panel. `--layout rail` and
+`--layout table` override the file's layout for that run. The panel applies
+changes immediately and saves the setting you changed for future launches.
+
+If you see `could not save config`, the current session still uses the change,
+but bushel could not write it to disk. Check permissions on the config directory
+and any `BUSHEL_CONFIG_DIR` override, then try again.
 
 ## `bushel update` refuses to update
 
