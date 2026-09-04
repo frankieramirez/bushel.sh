@@ -71,20 +71,14 @@ const features = [
 
           <Command command={INSTALL} />
 
-          <p class="hero-note only-wide">
+          <p class="hero-note">
             No Homebrew required · <a href="#install">brew and cargo below</a>
-          </p>
-          <p class="hero-note only-narrow">
-            No Homebrew required<br />
-            macOS 26 · Apple silicon · <a href="#install">brew + cargo below</a>
           </p>
         </div>
 
         <BasketMark size={320} class="hero-mark" />
       </div>
     </section>
-
-    <div class="wrap"><div class="rule"></div></div>
 
     <!-- ══ fig 01 — the demo ══ -->
     <section class="demo" aria-labelledby="fig-01">
@@ -155,8 +149,8 @@ const features = [
           </div>
 
           <figcaption class="demo-caption">
-            [ A real session: the rail, log follow, and a confirmed stop and
-            start ]
+            A real session: the rail, log follow, and a confirmed stop and
+            start
           </figcaption>
         </figure>
       </div>
@@ -207,26 +201,17 @@ const features = [
         <h2 class="install-heading" id="install-heading">Install</h2>
 
         <p class="install-lede">
-          macOS 26 on Apple silicon, with Apple's <a
+          One binary on top of Apple's <a
             href="https://github.com/apple/container">container</a
-          > CLI 1.2.x. bushel warns on untested versions but still runs.
+          > CLI. The <a href="/docs/install#what-bushel-needs">requirements</a>
+          are in the docs; bushel warns on untested versions but still runs.
         </p>
 
         <div class="methods">
           <div class="method">
             <span class="method-label is-start">
               Shell
-              <span class="method-start">
-                <svg
-                  width="7"
-                  height="9"
-                  viewBox="0 0 7 9"
-                  aria-hidden="true"
-                  focusable="false"
-                  ><path d="M7 0 0 4.5 7 9z" fill="currentColor"></path></svg
-                >
-                Start
-              </span>
+              <span class="method-start">Start here</span>
             </span>
             <Command command={INSTALL} compact />
           </div>
@@ -247,22 +232,9 @@ const features = [
 
         <div class="install-notes">
           <p>
-            Installs to <span class="mono">$CARGO_HOME/bin</span> (default <span
-              class="mono">~/.cargo/bin</span
-            >). <span class="mono">BUSHEL_INSTALL_DIR</span> picks another prefix;
-            <span class="mono">BUSHEL_NO_MODIFY_PATH=1</span> leaves your shell rc
-            alone. The script is the checksummed release asset on GitHub, and
-            bushel.sh/install only redirects to it.
-          </p>
-          <p>
-            bushel isn't on crates.io, so the cargo install needs <span
-              class="mono">--git</span
-            >. <strong>Upgrading:</strong> run <span class="mono"
-              >bushel update</span
-            >. It works out how it was installed: shell installs replace themselves
-            in place, Homebrew hands off to <span class="mono">brew upgrade</span
-            >, and cargo, Nix or a hand-placed binary get told what to run
-            instead.
+            Upgrade with <span class="mono">bushel update</span>, whichever way
+            it went in. Install prefixes, the shell rc, and what each method
+            does on update are in the <a href="/docs/install">install docs</a>.
           </p>
         </div>
       </div>
