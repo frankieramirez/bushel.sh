@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "0.3.4",
+  "version": "0.3.6",
   "keymap": [
     {
       "group": "global",
@@ -27,7 +27,11 @@
         },
         {
           "keys": "q",
-          "desc": "quit"
+          "desc": "quit (running work: w waits, q quits now)"
+        },
+        {
+          "keys": "ctrl-c",
+          "desc": "quit now (reports interrupted commands)"
         }
       ]
     },

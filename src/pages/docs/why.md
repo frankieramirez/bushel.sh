@@ -96,11 +96,12 @@ disable, and any future animation that cannot meet them does not ship.
 ## Polling, and saying so
 
 Apple Containers has no event API, so a periodic poll is the only refresh model
-available. bushel is honest about what that costs. Three consecutive container polls
-returning output it cannot parse will keep the last good list on screen and turn
-on a banner saying the rows are stale, which beats blanking the list or showing
-fresh-looking lies. If the `container` binary is missing entirely, the panes stay
-empty and the reason is in the message log.
+available. bushel shows loading and failed reads separately from empty lists.
+Repeated container read failures or stale reads keep the last good list on
+screen with a degraded banner. Stats have their own health warning and show
+placeholders when unavailable. If the `container` binary is missing entirely,
+a dedicated screen explains how to make it available on `PATH`. The message
+log holds the full errors.
 
 The same reasoning keeps telemetry small: CPU and memory sparklines with network
 and disk rates, sampled on the poll tick, attached to the selected container.

@@ -60,11 +60,11 @@ The `--enable-kernel-install` flag is doing real work there. Without it, a bare
 `container system start` stops on an interactive prompt that a TUI has no way to
 answer.
 
-### Every pane reads 0 and nothing on screen explains why
+### `container CLI not found — lists unavailable`
 
-Look at the right-hand end of the status bar. If it reads `container ?` instead
-of a version number, bushel could not run the `container` binary at all, and
-the empty panes are the result of nothing having answered.
+bushel shows a dedicated screen when it cannot run the `container` binary.
+It tells you to install Apple's CLI and restart bushel once it is on `PATH`.
+Press `m` for the full error or `q` to quit.
 
 Press `m` and you will see the real reason:
 
@@ -83,9 +83,18 @@ which container
 Apple's installer puts it in `/usr/local/bin`. Launching bushel from an editor
 or a task runner with a trimmed environment is the usual way to lose it.
 
-The service dot next to that version stays green here, which is misleading. It
-only turns red on the service-down screen, and bushel never gets far enough to
-reach that screen when the binary itself is absent.
+### A pane says `loading …` or `list failed: …`
+
+Lists start in a loading state. A failed read shows its error instead of
+claiming there are no resources. Counts are unavailable while a list is loading
+or failed; a successful empty list can show zero. Previously fetched rows stay
+visible after a failed refresh, but they are last-good data and may be stale.
+Press `m` for the command and full error.
+
+The header's status cluster, when there is room for it, says `loading` while
+container data is pending and `degraded` when container reads or telemetry are
+unhealthy. Its service dot turns green only with healthy container reads and,
+when containers are running, healthy stats.
 
 ## Banners along the top
 
@@ -102,19 +111,31 @@ reads.
 Press `b` to dismiss the banner for the session. If output really has moved,
 the degraded banner below is what you will see next.
 
-### `polls failing to parse — showing last good state`
+### `polls degraded: … — showing last good state`
 
-Three consecutive container polls returned stdout that would not deserialise.
-bushel holds the last good list on screen instead of blanking it, and turns the
-banner on so you know the rows are stale.
+Container read health covers command failures, timeouts and parse errors.
+Three consecutive failures, or three poll ticks without a successful read,
+turn on the degraded banner. bushel retains the last good list; if no read has
+succeeded yet, the banner says `list unavailable` instead. A successful
+container read clears this state.
 
-`m` shows what came back, prefixed `poll parse failure:`. In practice this is a
-`container` version whose JSON no longer matches, so it tends to arrive
-alongside the version banner. Worth an issue if you hit it, with the offending
-output pasted in.
+Press `m` for the full error. Parse errors appear as `poll parse failure:`;
+other read failures appear as `poll failed:`. A parse failure can mean the CLI's
+JSON no longer matches what bushel expects. Include the offending output in a
+bug report.
 
-Image, volume and network polls that fail never trip this banner. They only write to the
-message log.
+Image, volume and network failures show a `list failed` banner when that pane
+is active and retain any last-good rows. They do not drive the container poll
+banner.
+
+### `stats unavailable: …`
+
+Stats have separate read health. Repeated failures or a stale sample trigger
+this banner while containers are running. Three consecutive stats failures
+clear CPU, memory and telemetry history, leaving placeholders. A stale-sample
+warning can appear while the last values are still visible, so treat them as
+stale. Recovery after a failure starts a fresh rate baseline; press `m` for
+the stats error.
 
 ## An action failed
 
@@ -232,16 +253,10 @@ against the block above when a setting seems dead. The
 [config reference](/docs/config) is generated from bushel's own source and is
 the authority on the names.
 
-A value of the wrong type is louder. bushel prints one line and falls back to
-defaults for the whole file:
-
-```
-bushel: ignoring invalid config at /Users/you/.config/bushel/config.toml: TOML parse error at line 1, column 13
-```
-
-That prints before the UI takes over the screen, so it is easy to miss. Running
-`bushel` and quitting immediately with `q` will leave it visible in your
-scrollback.
+A value of the wrong type makes bushel fall back to defaults for the whole
+file. Press `m` to read the config-load error, which names the path and parse
+problem. An unreadable file is reported there too. bushel keeps that file
+untouched and refuses settings saves until you fix it and restart.
 
 The boolean flags only switch their settings on at startup. To turn one off,
 edit the file or change it in the settings panel. `--layout rail` and
@@ -249,8 +264,13 @@ edit the file or change it in the settings panel. `--layout rail` and
 changes immediately and saves the setting you changed for future launches.
 
 If you see `could not save config`, the current session still uses the change,
-but bushel could not write it to disk. Check permissions on the config directory
-and any `BUSHEL_CONFIG_DIR` override, then try again.
+but bushel could not safely write it to disk. Press `m` for the reason. Check
+permissions on the config directory and any `BUSHEL_CONFIG_DIR` override.
+Invalid or unreadable files are left untouched, as are files that cannot be
+edited without losing content. Fix the file and restart bushel. If another
+editor changed it after bushel loaded it, restart before saving again. A
+symbolic link is also left untouched; edit its target directly. Successful
+saves preserve comments and unknown keys.
 
 ## `bushel update` refuses to update
 
@@ -260,7 +280,7 @@ then hands the work to whatever put it there.
 - **Homebrew**: runs `brew upgrade bushel` for you.
 - **Nix**: refuses, because the store is read-only. Update the flake or channel
   that provides it and rebuild.
-- **cargo**: prints the `cargo install --git … --force` line to run. cargo
+- **cargo**: prints `cargo install bushel --force` to run. cargo
   cannot tell a new version from the current one without a full rebuild, so
   bushel will not burn the minutes on your behalf.
 - **`no install receipt found`**: the binary was placed by hand, or the receipt

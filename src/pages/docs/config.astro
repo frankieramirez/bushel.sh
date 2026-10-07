@@ -114,17 +114,27 @@ const headings = [
     <code>layout = "rail"</code> in the file. Changing a setting in the panel
     saves that choice while keeping the other saved option values. For example,
     launching with <code>--ascii</code> and changing the layout does not save
-    the temporary ASCII override. Saving rewrites the config file, so comments
-    and unknown keys are not preserved.
+    the temporary ASCII override. Saving changes only the selected setting and
+    preserves comments, unknown keys and the other saved values.
   </p>
 
   <p>
     A key bushel does not recognise is ignored in silence, so a misspelling like
     <code>reduce_motion</code> is silently dead. A value of the
-    wrong type is louder: bushel prints one line naming the file and falls back
-    to defaults for all of it.
+    wrong type is louder: bushel logs an error naming the file and falls back
+    to defaults for all of it. Press <code>m</code> to read the error.
     <a href="/docs/troubleshooting#settings-that-do-nothing">Troubleshooting</a>
     has both.
+  </p>
+
+  <p>
+    bushel refuses to overwrite an invalid or unreadable config, a file changed
+    on disk since it was loaded, or a symbolic link. It also refuses a save if
+    the file cannot be edited without losing content. The change still applies
+    to the current session; press <code>m</code> for the save error. Fix an
+    invalid file and restart bushel before saving again. Restart after an external
+    edit too.
+    Edit a symbolic link's target directly.
   </p>
 
   <h2 id="config-directory">Config directory</h2>

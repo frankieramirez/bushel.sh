@@ -100,9 +100,31 @@ headings.push({ depth: 2, slug: "contextual-keys", text: "Contextual keys" });
   </p>
 
   <p>
-    <code>Ctrl-C</code> quits from any screen. If the container service is down,
-    <code>s</code> starts it, <code>m</code> opens the message log, and
-    <code>q</code> quits.
+    The message log (<code>m</code>) and help overlay (<code>?</code>) scroll
+    with <code>j</code>/<code>k</code> or the up/down arrows,
+    <code>PageUp</code>/<code>PageDown</code>, and <code>g</code>/<code>G</code>
+    for the top or bottom. <code>esc</code>, <code>q</code>, <code>?</code> or
+    <code>m</code> closes either overlay. Confirmation prompts use those same
+    scrolling keys to reveal long command previews without confirming them.
+  </p>
+
+  <p>
+    When actions, a pull, prune or service start are still running,
+    <code>q</code> opens a prompt listing the commands. Press <code>w</code>
+    to wait for completion and then quit, <code>q</code> again to quit now,
+    or <code>esc</code> to cancel the prompt or wait. Scroll that command list
+    with <code>j</code>/<code>k</code>, the up/down arrows or
+    <code>PageUp</code>/<code>PageDown</code>. While waiting, new actions are
+    disabled. <code>Ctrl-C</code> quits immediately from any screen. A forced
+    exit reports interrupted commands after restoring the terminal; check
+    their outcomes before retrying.
+  </p>
+
+  <p>
+    If the container service is down, <code>s</code> starts it,
+    <code>m</code> opens the message log, and <code>q</code> requests quit.
+    The missing-CLI screen accepts <code>m</code> and <code>q</code>; restart
+    bushel after making <code>container</code> available on <code>PATH</code>.
   </p>
 
   <p>

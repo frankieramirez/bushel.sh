@@ -114,7 +114,7 @@ Each installer is built for its own release and installs exactly that version,
 so pinning is a matter of naming the tag instead of `latest`:
 
 ```sh
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/frankieramirez/bushel/releases/download/v0.3.4/bushel-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/frankieramirez/bushel/releases/download/v0.3.6/bushel-installer.sh | sh
 ```
 
 ## From source
@@ -131,11 +131,10 @@ This install has no receipt. `bushel update` therefore prints a cargo command
 instead of replacing the binary itself:
 
 ```sh
-cargo install --git https://github.com/frankieramirez/bushel --force
+cargo install bushel --force
 ```
 
-That command builds the GitHub source. To stay on crates.io releases, run
-`cargo install bushel --force` yourself.
+That command upgrades from crates.io releases.
 
 To build the current GitHub source directly:
 
@@ -234,11 +233,11 @@ receipt exists, then hands the work back to it:
 
 - **Shell installer.** Replaces itself in place from the latest GitHub release,
   printing the new version. Already current, and it says
-  `bushel 0.3.4 is already up to date` instead.
+  `bushel 0.3.6 is already up to date` instead.
 - **Homebrew.** Refreshes the tap before running `brew upgrade bushel`, even
   when normal Homebrew auto-updates are disabled.
 - **cargo.** Prints the command and stops:
-  `cargo install --git https://github.com/frankieramirez/bushel --force`. It
+  `cargo install bushel --force`. It
   will not run it, because cargo cannot tell a new version from the current one
   without a full rebuild, and burning those minutes on a likely no-op is worse
   than one line of output.
