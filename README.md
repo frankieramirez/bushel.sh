@@ -32,9 +32,9 @@ into `sh` stays next to the archive it installs.
 
 ## The design
 
-The site is direction D, "One Bushel, Printed", in its Orchard inks, from
-`design/bushel.pen`, a pen.dev file. That file is the source of visual truth,
-so take changes to the look there first. It's a two-ink risograph zine: apple
+The site is direction D, "One Bushel, Printed", in its Orchard inks. It was
+drawn first on a pen.dev canvas that lives outside the repo, so take changes to
+the look there before the code. It's a two-ink risograph zine: apple
 red and leaf green on warm paper, overprinting to a near-black brown wherever
 they cross (`mix-blend-mode: multiply`). Big Shoulders carries the figures,
 Instrument Sans the reading, DM Mono the commands and the small print.
@@ -113,7 +113,7 @@ ffmpeg -ss 9 -i demo/bushel-demo.mp4 -frames:v 1 -q:v 4 \
 
 ## The social card
 
-`public/og.png` is a 1200×630 card exported from the "D · Social card" frame in
-`design/bushel.pen`. Redraw it there whenever the claim or the palette changes.
+`public/og.png` is a 1200×630 card exported from the pen.dev canvas. Redraw it
+there whenever the claim or the palette changes.
 
 Planned on the [bushel.sh wayfinder map](https://github.com/frankieramirez/bushel/issues/31).

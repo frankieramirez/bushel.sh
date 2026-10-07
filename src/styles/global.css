@@ -1,10 +1,11 @@
 /*
  * bushel.sh — "One Bushel, Printed"
  *
- * The visual spec is direction D, Orchard, in design/bushel.pen (pen.dev). A
- * two-ink risograph zine: apple red and leaf green on warm paper, overprinting
- * to near-black brown wherever they cross. Big Shoulders carries the figures, Instrument
- * Sans the reading, DM Mono the commands and the small print.
+ * The visual spec is direction D, Orchard, drawn on a pen.dev canvas kept out
+ * of the repo. A two-ink risograph zine: apple red and leaf green on warm paper,
+ * overprinting to near-black brown wherever they cross. Big Shoulders carries
+ * the figures, Instrument Sans the reading, DM Mono the commands and the small
+ * print.
  *
  * Motion follows bushel's own rules: nothing waits on it, no interaction takes
  * longer than 150 ms, and prefers-reduced-motion turns all of it off.
