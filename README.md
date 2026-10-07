@@ -69,19 +69,28 @@ the running program reads, and `src/lib/bushelDocs.ts` fetches it once per build
 (see [issue #43](https://github.com/frankieramirez/bushel/issues/43)).
 
 It falls back to the vendored copy in `src/data/docs.json` when that fetch
-fails, and again when a release's `schema_version` has moved ahead of the
-`SCHEMA_VERSION` this site knows how to render. The build log carries a
+fails, the payload is unusable, or the release's `schema_version` differs from
+the `SCHEMA_VERSION` this site knows how to render. The build log carries a
 `[docs.json]` line saying which copy won and why.
 
-The bundled reference currently matches bushel v0.3.4. Refresh it from the
-bushel checkout when updating the site for a release:
+The bundled reference currently matches bushel v0.3.6. Refresh it from the
+published release asset when updating the site for a release:
 
 ```sh
-cargo run --example docs-json -- --out ../bushel.sh/src/data/docs.json
+curl -fL https://github.com/frankieramirez/bushel/releases/download/v0.3.6/docs.json \
+  -o src/data/docs.json
 ```
 
+Compare its version and SHA-256 with the release asset metadata. To regenerate
+it from source instead, check out the intended release tag in the bushel repo
+before running `cargo run --example docs-json -- --out ../bushel.sh/src/data/docs.json`.
+
 `deploy-site.yml` in the bushel repo triggers the `BUSHEL_SH_DEPLOY_HOOK` after
-a stable release announces, rebuilding the site with that release's tables.
+a stable release announces, queuing a rebuild of the site's configured branch.
+At build time the site fetches the latest release's tables; the hook does not
+edit handwritten guides or refresh the bundled fallback. A successful hook
+request confirms the rebuild was queued, not that deployment finished or the
+live pages are fresh. Verify the deployment and rendered version separately.
 The generated pages show the data's version, which may differ from an older
 binary a reader has installed.
 

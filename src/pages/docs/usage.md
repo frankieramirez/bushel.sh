@@ -26,12 +26,19 @@ controls.
 ## Containers
 
 Select a container in pane `1`. The detail area has Logs and Inspect tabs. `l`
-opens Logs and `i` opens Inspect. Logs show a backlog of the most recent 200
-lines. Following is on by default; `F` toggles it while the Logs tab is active.
+opens Logs and `i` opens Inspect. For a running container, Logs fetch a backlog
+of the most recent 200 lines. Following is on by default; `F` toggles it while
+the Logs tab is active.
 With detail focused, scroll backward with `k` or `g` to stop following.
 PageUp scrolls back from either focus. `w` switches
 between wrapped and truncated log lines. Press `e` on a running container to
 open an interactive `/bin/sh` session.
+
+If the selected running container stops, its already-fetched Logs tail stays
+visible with a stopped marker, and live following ends. An already-started
+backlog read can still finish. Selecting a different container or leaving the
+Logs tab clears that tail. Newly selecting a stopped container does not fetch
+a backlog.
 
 The action menu (`space`) offers actions that apply to the selected container.
 The direct action keys are `s` for start or stop, `r` for restart, `K` for kill,
