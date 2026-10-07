@@ -1,33 +1,33 @@
 ---
 /**
- * The footer stamp — the page's one centred, symmetric moment. Shared by the
- * landing page and the docs so a reader never falls off the bottom of one into
- * a different-looking site.
+ * The colophon, shared by the landing page and the docs so a reader never
+ * falls off the bottom of one into a different-looking site.
+ *
+ * The sign-off is the wordmark pulled twice, once per ink, and set a little out
+ * of register. global.css lets the blue plate drift as it scrolls into view.
  */
-import BasketMark from "./BasketMark.astro";
-
 const REPO = "https://github.com/frankieramirez/bushel";
 ---
 
 <footer class="colophon">
-  <div class="wrap"><div class="rule"></div></div>
-  <div class="wrap colophon-inner">
-    <BasketMark size={54} />
-    <span class="stamp">bushel</span>
-    <p class="tagline">A container that holds apples</p>
+  <nav class="wrap colophon-links" aria-label="Project">
+    <a href="/docs">Docs</a>
+    <a href={REPO}>GitHub</a>
+    <a href={`${REPO}/releases`}>Releases</a>
+    <a href={`${REPO}/blob/main/SPEC.md`}>Spec</a>
+    <a href={`${REPO}/issues/56`}>Roadmap</a>
+    <a href={`${REPO}/blob/main/LICENSE`}>MIT license</a>
+  </nav>
 
-    <nav class="colophon-links" aria-label="Project">
-      <a href="/docs">Docs</a>
-      <a href={REPO}>GitHub</a>
-      <a href={`${REPO}/releases`}>Releases</a>
-      <a href={`${REPO}/blob/main/SPEC.md`}>Spec</a>
-      <a href={`${REPO}/blob/main/LICENSE`}>MIT</a>
-    </nav>
+  <div class="plates display" aria-hidden="true">
+    <span class="plate-pink">bushel</span>
+    <span class="plate-blue">bushel</span>
+  </div>
 
-    <p class="disclaimer">
-      Not affiliated with Apple<span class="only-wide-inline"> · </span><br
-        class="br-narrow"
-      />container is Apple's open-source CLI
-    </p>
+  <div class="wrap fine-print">
+    <span>Printed in two inks</span>
+    <span>Not affiliated with Apple · container is Apple's open-source CLI</span>
+    <span>Illustration generated for this page</span>
+    <span>Motion: 150 ms, or none at all</span>
   </div>
 </footer>

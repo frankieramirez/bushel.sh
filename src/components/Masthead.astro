@@ -1,12 +1,12 @@
 ---
 /**
- * The stencil header, shared by the landing page and every docs page.
+ * The masthead, shared by the landing page and every docs page.
  *
- * The mark links home from anywhere except home itself, where a self-link
- * would be noise. "Docs" stays visible at every width — the rest of the links
- * collapse to the GitHub glyph on a phone, and a reader on a narrow landing
- * page still needs a way into the docs.
+ * The wordmark links home from anywhere except home itself, where a self-link
+ * would be noise. "Docs" and the install button stay at every width; Spec and
+ * GitHub fold away on a phone, where the colophon still carries them.
  */
+import Arrow from "./Arrow.astro";
 import ExternalArrow from "./ExternalArrow.astro";
 import { isDocsPath } from "../lib/docs";
 import { bushelDocs } from "../lib/bushelDocs";
@@ -20,54 +20,30 @@ const inDocs = isDocsPath(path);
 ---
 
 <header class="masthead">
-  <div class="wrap stencil">
+  <div class="wrap">
     {
       atHome ? (
         <span class="masthead-mark">
-          <span class="stamp">bushel</span>
-          <span class="masthead-version">v{version}</span>
+          <span class="wordmark">bushel</span>
+          <span class="masthead-issue">Printed matter · Issue {version}</span>
         </span>
       ) : (
         <a class="masthead-mark" href="/" aria-label="bushel home">
-          <span class="stamp">bushel</span>
-          <span class="masthead-version">v{version}</span>
+          <span class="wordmark">bushel</span>
+          <span class="masthead-issue">Printed matter · Issue {version}</span>
         </a>
       )
     }
 
-    <span class="masthead-spec">macOS 26 · Apple silicon · container 1.2.x</span
-    >
-
     <nav class="masthead-nav" aria-label="Project">
-      <a
-        class="masthead-docs"
-        href="/docs"
-        aria-current={inDocs ? "true" : undefined}>Docs</a
+      <a href="/docs" aria-current={inDocs ? "true" : undefined}>Docs</a>
+      <a class="masthead-ext" href={`${REPO}/blob/main/SPEC.md`}
+        >Spec <ExternalArrow /></a
       >
-
-      <span class="masthead-links">
-        <a href={`${REPO}/blob/main/SPEC.md`}>Spec <ExternalArrow /></a>
-        <a href={REPO}>GitHub <ExternalArrow /></a>
-      </span>
-
-      <a class="masthead-gh" href={REPO} aria-label="bushel on GitHub">
-        <svg
-          width="19"
-          height="19"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6A4.6 4.6 0 0 0 18.9 6a4.3 4.3 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.3 0C6.6 2.5 5.5 2.8 5.5 2.8A4.3 4.3 0 0 0 5.4 6 4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"
-          ></path>
-        </svg>
-      </a>
+      <a class="masthead-ext" href={REPO}>GitHub <ExternalArrow /></a>
+      <a class="take-one" href={atHome ? "#take-one" : "/#take-one"}
+        >Take one <Arrow dir="down" /></a
+      >
     </nav>
   </div>
 </header>

@@ -1,45 +1,71 @@
 ---
 import Base from "../layouts/Base.astro";
-import BasketMark from "../components/BasketMark.astro";
+import Arrow from "../components/Arrow.astro";
 import Command from "../components/Command.astro";
 import Masthead from "../components/Masthead.astro";
 import Colophon from "../components/Colophon.astro";
+import { DOCS_PAGES } from "../lib/docs";
+import { bushelDocs } from "../lib/bushelDocs";
 
 const INSTALL = "curl -LsSf https://bushel.sh/install | sh";
+const BREW = "brew install frankieramirez/tap/bushel";
+const CARGO = "cargo install bushel";
+
+const ROADMAP = "https://github.com/frankieramirez/bushel/issues/56";
+
+const { version } = await bushelDocs();
 
 const description =
   "Browse Apple containers, images, volumes and networks in bushel. Choose a rail or table layout, watch live container telemetry, and review destructive commands before they run.";
 
-const features = [
+/** The packing list: one figure, one label, one line each. */
+const items = [
   {
-    no: "01",
-    head: ["Four panes,", "two layouts"],
-    body: 'Keep containers, images, volumes and networks together on a rail, or give the active table the full width. Press <span class="mono">,</span> to change layouts and save your preference.',
+    num: "4",
+    label: "panes",
+    body: "Containers, images, volumes and networks, all in one window.",
   },
   {
-    no: "02",
-    head: ["Telemetry on", "the selection"],
-    body: "CPU and memory sparklines with network and disk rates, sampled every poll tick. There is nothing to configure and no dashboard to open.",
+    num: "2",
+    label: "layouts",
+    body: 'A rail beside the detail pane, or the table at full width. Press <span class="mono">,</span> for settings to switch.',
   },
   {
-    no: "03",
-    head: ["The command,", "before it runs"],
-    body: 'Delete, prune and kill each show the exact <span class="mono">container …</span> line in the confirmation, so you read what will run before you agree to it.',
+    num: "1",
+    label: "confirmation",
+    body: 'Delete, prune and kill print the exact <span class="mono">container</span> command before anything runs.',
   },
   {
-    no: "04",
-    head: ["Logs that", "keep up"],
-    body: 'A bounded tail with follow and wrap toggles. bushel owns its <span class="mono">logs -f</span> subprocesses and kills them, so nothing leaks when a container stops.',
+    num: "150",
+    label: "ms, tops",
+    body: 'Every animation yields to input and none of it delays a keystroke. <span class="mono">--reduced-motion</span> turns it all off.',
   },
   {
-    no: "05",
-    head: ["Drop into", "a shell"],
-    body: 'Press <span class="mono">e</span>. bushel suspends itself, hands stdio to <span class="mono">container exec -it</span>, and restores the layout when you exit.',
+    num: "0",
+    label: "leaks",
+    body: 'bushel owns its <span class="mono">logs -f</span> tails and kills them when a container stops.',
   },
   {
-    no: "06",
-    head: ["Motion you", "never wait on"],
-    body: 'Every animation caps at 150 ms and yields to input, and none of them delay data or keystrokes. <span class="mono">--reduced-motion</span> turns all of it off.',
+    num: "1",
+    label: "key to a shell",
+    body: 'Press <span class="mono">e</span>. bushel steps aside for <span class="mono">container exec -it</span>, then puts the layout back.',
+  },
+];
+
+/*
+ * The tear-off strip. One tab is already gone, the way a flyer looks once a
+ * few people have walked past it.
+ */
+const tabs = [INSTALL, BREW, CARGO, INSTALL, null, CARGO];
+
+const contents = [
+  ...DOCS_PAGES.map((page) => ({ ...page, external: false })),
+  {
+    no: "·",
+    title: "Roadmap",
+    href: ROADMAP,
+    summary: "What's shipped and what's still to come.",
+    external: true,
   },
 ];
 ---
@@ -53,61 +79,103 @@ const features = [
   <Masthead />
 
   <main id="main">
-    <!-- ══ hero ══ -->
+    <!-- ══ the cover ══ -->
     <section class="hero">
       <div class="wrap">
-        <div class="hero-copy">
-          <p class="eyebrow">Containers · Images · Volumes · Networks</p>
+        <div class="hero-eq">
+          <p class="slug">A terminal UI for Apple Containers · macOS 26</p>
+          <h1 class="display">
+            <span class="eq-head">1 bushel</span>
+            <span class="eq-line">= 4 panes</span>
+            <span class="eq-line">= 2 layouts</span>
+            <span class="eq-line">= 1 binary</span>
+          </h1>
+        </div>
 
-          <h1>A terminal UI<br />for <em>Apple<br />Containers</em></h1>
+        <div class="taped">
+          <img
+            src="/img/bushel-riso.webp"
+            srcset="/img/bushel-riso-448.webp 448w, /img/bushel-riso.webp 896w"
+            sizes="(min-width: 1000px) 33vw, 320px"
+            width="896"
+            height="1200"
+            alt=""
+            fetchpriority="high"
+          />
+          <p class="sticker" aria-hidden="true">
+            <span class="sticker-fresh">Fresh</span>
+            <span class="sticker-meta">v{version}<br />macOS 26</span>
+          </p>
+        </div>
 
+        <div class="hero-pitch">
           <p class="hero-lede">
-            Browse containers, images, volumes and networks on your Mac, with
-            live telemetry for the selected container. Choose a rail or table
-            layout, and review destructive <span
-              class="mono">container</span
-            > commands before they run.
+            bushel is a terminal UI for Apple's <span class="mono"
+              >container</span
+            > CLI. Browse containers, images, volumes and networks in four panes,
+            watch live telemetry on the one you've picked, and read every destructive
+            command before it runs.
           </p>
 
           <Command command={INSTALL} />
 
           <p class="hero-note">
-            No Homebrew required · <a href="#install">brew and cargo below</a>
+            <span class="slug is-blue">No Homebrew needed</span>
+            <a class="slug" href="#take-one"
+              >More ways to take one <Arrow dir="down" /></a
+            >
           </p>
         </div>
-
-        <BasketMark size={320} class="hero-mark" />
       </div>
     </section>
 
-    <!-- ══ fig 01 — the demo ══ -->
-    <section class="demo" aria-labelledby="fig-01">
+    <!-- ══ sec. 01 — packing list ══ -->
+    <section class="sheet packing" aria-labelledby="packing-heading">
       <div class="wrap">
-        <h2 class="fig" id="fig-01">
-          <span class="fig-no">Fig. 01</span>
-          <span class="fig-name"
-            >The rail, the detail pane, the action menu</span
-          >
-        </h2>
+        <header class="sheet-head">
+          <div>
+            <p class="slug">Sec. 01 · Packing list</p>
+            <h2 class="display" id="packing-heading">What's in the bushel</h2>
+          </div>
+          <p class="sheet-lede">
+            Create containers with Apple's CLI, then manage them here. Pull and
+            tag images, make named volumes, and inspect the networks you already
+            have.
+          </p>
+        </header>
 
-        <figure class="terminal-figure">
-          <div class="terminal">
-            <div class="terminal-bar">
-              <span class="terminal-lights" aria-hidden="true">
-                <span style="background:#ff7b72"></span>
-                <span style="background:#e3b341"></span>
-                <span style="background:#7ee787"></span>
-              </span>
-              <span class="terminal-title">bushel · recorded session</span>
-              <button
-                type="button"
-                class="terminal-toggle"
-                data-demo-toggle
-                aria-controls="demo-video"
-                aria-label="Pause the demo">PAUSE</button
-              >
-            </div>
+        <ul class="items">
+          {
+            items.map((item) => (
+              <li class="item">
+                <h3 class="figure display">
+                  <span class="figure-num">{item.num}</span>{" "}
+                  <span class="figure-label">{item.label}</span>
+                </h3>
+                <p set:html={item.body} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
 
+    <!-- ══ sec. 02 — fig. a, the recording ══ -->
+    <section class="sheet fig-a" aria-labelledby="fig-a-heading">
+      <div class="wrap">
+        <header class="sheet-head">
+          <div>
+            <p class="slug">Sec. 02 · Fig. A</p>
+            <h2 class="display" id="fig-a-heading">The actual thing</h2>
+          </div>
+          <p class="sheet-lede">
+            A recorded session, printed in two inks. It plays muted, and stops
+            when you scroll past it.
+          </p>
+        </header>
+
+        <div class="shot-stage">
+          <figure class="shot">
             <video
               id="demo-video"
               autoplay
@@ -139,121 +207,178 @@ const features = [
                 video.removeAttribute("autoplay");
                 video.pause();
                 video.dataset.reducedMotion = "true";
-                var toggle = document.querySelector("[data-demo-toggle]");
-                if (toggle) {
-                  toggle.textContent = "PLAY";
-                  toggle.setAttribute("aria-label", "Play the demo");
-                }
               })();
             </script>
-          </div>
 
-          <figcaption class="demo-caption">
-            A recorded rail session with log follow and container actions.
-            See <a href="/docs/usage">Using bushel</a> for the current workflows.
-          </figcaption>
-        </figure>
+            <svg
+              class="shot-ring"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <ellipse cx="50" cy="50" rx="48" ry="45" transform="rotate(-2 50 50)"
+              ></ellipse>
+            </svg>
+          </figure>
+
+          <ol class="shot-notes" aria-label="What the recording shows">
+            <li>
+              <span>the rail: every pane, and the one you're on</span>
+              <Arrow dir="right" class="note-arrow" />
+            </li>
+            <li>
+              <Arrow dir="left" class="note-arrow" />
+              <span>live cpu and memory for the selection</span>
+            </li>
+            <li>
+              <Arrow dir="left" class="note-arrow" />
+              <span>the log tail, following. F and w toggle follow and wrap.</span>
+            </li>
+            <li>
+              <span>the keys that matter right now, always on screen</span>
+            </li>
+          </ol>
+
+          <div class="shot-controls">
+            <button
+              type="button"
+              class="shot-toggle"
+              data-demo-toggle
+              aria-controls="demo-video">Pause</button
+            >
+            <a href="/docs/usage">Using bushel <Arrow dir="right" /></a>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ══ fig 02 — features, ink reversed ══ -->
-    <section class="band-cream" aria-labelledby="features-heading">
+    <!-- ══ sec. 03 — take one ══ -->
+    <section class="sheet take" id="take-one" aria-labelledby="take-heading">
       <div class="wrap">
-        <p class="fig">
-          <span class="fig-no">Fig. 02</span>
-          <span class="fig-name">What is in the box</span>
-        </p>
-
-        <h2 class="band-heading" id="features-heading">
-          For the containers<br class="br-wide" /> you already have.
-        </h2>
-
-        <p class="band-lede">
-          Create containers on the command line, then manage them here. Pull
-          and tag images, create named volumes, and inspect existing networks.
-        </p>
-
-        <div class="features">
-          {
-            features.map((feature) => (
-              <article class="feature">
-                <span class="feature-no">{feature.no}</span>
-                <h3>
-                  {feature.head[0]} <br class="br-wide" />
-                  {feature.head[1]}
-                </h3>
-                <p set:html={feature.body} />
-              </article>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ fig 03 — install ══ -->
-    <section class="install" id="install" aria-labelledby="install-heading">
-      <div class="wrap">
-        <p class="fig">
-          <span class="fig-no">Fig. 03</span>
-          <span class="fig-name">Three ways to unpack it</span>
-        </p>
-
-        <h2 class="install-heading" id="install-heading">Install</h2>
-
-        <p class="install-lede">
-          One binary on top of Apple's <a
-            href="https://github.com/apple/container">container</a
-          > CLI. The <a href="/docs/install#what-bushel-needs">requirements</a>
-          are in the docs; bushel warns on untested versions but still runs.
-        </p>
-
-        <div class="methods">
-          <div class="method">
-            <span class="method-label is-start">
-              Shell
-              <span class="method-start">Start here</span>
-            </span>
-            <Command command={INSTALL} compact />
+        <div class="flyer">
+          <div class="flyer-body">
+            <p class="flyer-head display" aria-hidden="true">
+              <span class="is-pink">Free</span>
+              <span class="is-blue">bushel.</span>
+            </p>
+            <p>
+              One binary on top of Apple's <span class="mono">container</span>
+              CLI. For macOS 26 on Apple silicon, tested with container 1.2.x.
+              Upgrade any time with <span class="mono">bushel update</span>.
+            </p>
+            <p class="slug">Please take one <Arrow dir="down" /></p>
           </div>
 
-          <div class="method">
-            <span class="method-label">Homebrew</span>
-            <Command command="brew install frankieramirez/tap/bushel" compact />
-          </div>
-
-          <div class="method">
-            <span class="method-label">Cargo</span>
-            <Command
-              command="cargo install bushel"
-              compact
-            />
-          </div>
+          <!--
+            Pointer-only: every command here is also in the list beside the
+            flyer, where it has a labelled copy button for keyboard and screen
+            reader users.
+          -->
+          <ul class="tabs" aria-hidden="true">
+            {
+              tabs.map((command) =>
+                command ? (
+                  <li class="tab">
+                    <button
+                      type="button"
+                      class="tab-button"
+                      tabindex="-1"
+                      data-copy={command}
+                      data-tear
+                    >
+                      <span>{command}</span>
+                    </button>
+                  </li>
+                ) : (
+                  <li class="tab is-gone" />
+                ),
+              )
+            }
+          </ul>
         </div>
 
-        <div class="install-notes">
-          <p>
-            Upgrade with <span class="mono">bushel update</span>, whichever way
-            it went in. Install prefixes, the shell rc, and what each method
-            does on update are in the <a href="/docs/install">install docs</a>.
+        <div class="ways">
+          <div>
+            <p class="slug">Sec. 03 · Take one</p>
+            <h2 class="display" id="take-heading">Three ways in</h2>
+          </div>
+
+          <div class="way">
+            <p class="way-label">
+              Shell <span class="slug">Start here</span>
+            </p>
+            <Command command={INSTALL} />
+          </div>
+
+          <div class="way">
+            <p class="way-label">Homebrew</p>
+            <Command command={BREW} outline />
+          </div>
+
+          <div class="way">
+            <p class="way-label">Cargo</p>
+            <Command command={CARGO} outline />
+          </div>
+
+          <p class="ways-note">
+            bushel warns on container versions it hasn't been tested against, but
+            still runs. Install prefixes, completions and the man page are in the
+            <a href="/docs/install">install docs</a>.
           </p>
         </div>
+      </div>
+    </section>
+
+    <!-- ══ sec. 04 — contents ══ -->
+    <section class="contents" aria-labelledby="contents-heading">
+      <div class="wrap">
+        <p class="slug">Sec. 04 · Contents</p>
+        <h2 class="display" id="contents-heading">The rest is in the docs</h2>
+
+        <ol class="toc-list">
+          {
+            contents.map((entry) => (
+              <li>
+                <a href={entry.href}>
+                  <span class="toc-no">{entry.no}</span>
+                  <span>
+                    <span class="toc-title">{entry.title}</span>
+                    <span class="toc-sum">{entry.summary}</span>
+                  </span>
+                  <Arrow
+                    dir={entry.external ? "up-right" : "right"}
+                    class="toc-arrow"
+                  />
+                </a>
+              </li>
+            ))
+          }
+        </ol>
       </div>
     </section>
   </main>
 
   <Colophon />
+
+  <p class="visually-hidden" role="status" data-copy-status></p>
 </Base>
 
 <script>
-  // ── copy affordances ────────────────────────────────────────────────────
+  // ── copying, and tearing off a tab ──────────────────────────────────────
   const RESET_MS = 1600;
+  const REGROW_MS = 2600;
+
+  const status = document.querySelector<HTMLElement>("[data-copy-status]");
 
   document
     .querySelectorAll<HTMLButtonElement>("button[data-copy]")
     .forEach((button) => {
       const command = button.dataset.copy ?? "";
       const label = button.querySelector<HTMLElement>(".copy-label");
-      const restore = label?.textContent ?? "";
+      const tab = button.hasAttribute("data-tear")
+        ? button.closest<HTMLElement>(".tab")
+        : null;
       let timer: number | undefined;
 
       button.addEventListener("click", async () => {
@@ -263,20 +388,33 @@ const features = [
           return; // no clipboard here — leave the affordance untouched
         }
 
+        if (status) status.textContent = `Copied: ${command}`;
+        window.clearTimeout(timer);
+
+        // A tear-off tab comes away in the hand and grows back a moment later.
+        if (tab) {
+          const lean = (Math.random() * 10 - 5).toFixed(1);
+          tab.style.setProperty("--tear", `${lean}deg`);
+          tab.dataset.torn = "";
+          timer = window.setTimeout(() => {
+            delete tab.dataset.torn;
+          }, REGROW_MS);
+          return;
+        }
+
         button.dataset.copied = "true";
         button.setAttribute("aria-label", `Copied: ${command}`);
-        if (label) label.textContent = "COPIED";
+        if (label) label.textContent = "Copied";
 
-        window.clearTimeout(timer);
         timer = window.setTimeout(() => {
           delete button.dataset.copied;
           button.setAttribute("aria-label", `Copy command: ${command}`);
-          if (label) label.textContent = restore;
+          if (label) label.textContent = "Copy";
         }, RESET_MS);
       });
     });
 
-  // ── the demo ────────────────────────────────────────────────────────────
+  // ── the recording ───────────────────────────────────────────────────────
   const video = document.querySelector<HTMLVideoElement>("#demo-video");
   const toggle = document.querySelector<HTMLButtonElement>("[data-demo-toggle]");
 
@@ -289,10 +427,10 @@ const features = [
     // The label reports what the reader asked for, not what the observer did —
     // scrolling the demo out of view pauses it without flipping the control.
     const render = () => {
-      toggle.textContent = wantsPlay ? "PAUSE" : "PLAY";
+      toggle.textContent = wantsPlay ? "Pause" : "Play";
       toggle.setAttribute(
         "aria-label",
-        wantsPlay ? "Pause the demo" : "Play the demo",
+        wantsPlay ? "Pause the recording" : "Play the recording",
       );
     };
 

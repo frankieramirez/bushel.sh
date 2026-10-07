@@ -1,0 +1,35 @@
+---
+/**
+ * Arrows as geometry. The self-hosted latin subsets stop short of U+2190–2197,
+ * so a typed → or ↗ would drop to a system face mid-line. ↑ and ↓ are in the
+ * subset, but Big Shoulders draws them thin, so they come from here too.
+ */
+interface Props {
+  dir?: "right" | "left" | "down" | "up-right";
+  class?: string;
+}
+
+const { dir = "right", class: className } = Astro.props;
+
+const paths: Record<NonNullable<Props["dir"]>, string[]> = {
+  right: ["M2 8h12", "M9 3l5 5-5 5"],
+  left: ["M14 8H2", "M7 3L2 8l5 5"],
+  down: ["M8 2v12", "M3 9l5 5 5-5"],
+  "up-right": ["M3.5 12.5l9-9", "M5 3.5h7.5V11"],
+};
+---
+
+<svg
+  class:list={["arrow", className]}
+  width="0.85em"
+  height="0.85em"
+  viewBox="0 0 16 16"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="square"
+  aria-hidden="true"
+  focusable="false"
+>
+  {paths[dir].map((d) => <path d={d} />)}
+</svg>
