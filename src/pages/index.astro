@@ -368,8 +368,20 @@ const contents = [
   // ── copying, and tearing off a tab ──────────────────────────────────────
   const RESET_MS = 1600;
   const REGROW_MS = 2600;
+  const ANNOUNCE_MS = 100;
 
   const status = document.querySelector<HTMLElement>("[data-copy-status]");
+  let announceTimer: number | undefined;
+
+  // Empty the region first, so copying the same command twice is still read out.
+  const announce = (message: string) => {
+    if (!status) return;
+    window.clearTimeout(announceTimer);
+    status.textContent = "";
+    announceTimer = window.setTimeout(() => {
+      status.textContent = message;
+    }, ANNOUNCE_MS);
+  };
 
   document
     .querySelectorAll<HTMLButtonElement>("button[data-copy]")
@@ -388,7 +400,7 @@ const contents = [
           return; // no clipboard here — leave the affordance untouched
         }
 
-        if (status) status.textContent = `Copied: ${command}`;
+        announce(`Copied: ${command}`);
         window.clearTimeout(timer);
 
         // A tear-off tab comes away in the hand and grows back a moment later.
