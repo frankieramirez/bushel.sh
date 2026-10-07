@@ -32,17 +32,32 @@ into `sh` stays next to the archive it installs.
 
 ## The design
 
-The page implements the "Crate, as a page" canvas locked in
-[issue #32](https://github.com/frankieramirez/bushel/issues/32). That canvas is
-the source of visual truth, so take changes to the look there first. It asks for
-an orchard-green fruit-crate label, flat colour with hard edges, a two-colour
-press rhythm that flips to green ink on cream for the features band, and
-FIG-numbered sections. Bevan carries the claim, JetBrains Mono the stencil
-labels and commands. Body text is Archivo.
+The site is direction D, "One Bushel, Printed", in its Orchard inks. It was
+drawn first on a pen.dev canvas that lives outside the repo, so take changes to
+the look there before the code. It's a two-ink risograph zine: apple
+red and leaf green on warm paper, overprinting to a near-black brown wherever
+they cross (`mix-blend-mode: multiply`). Big Shoulders carries the figures,
+Instrument Sans the reading, DM Mono the commands and the small print.
+
+Apple red only clears 3:1 on the paper, so it's kept for large type and fills.
+Small red text uses the deeper `--apple-ink`, and small text on the green plate
+uses `--apple-pale`. The basket print in `public/img/` was generated for the
+page, then re-inked from the original pink and blue by separating the two ink
+layers, so its halftones survived. The colophon says it was generated.
+
+Motion follows bushel's own rules: nothing waits on it, no interaction runs past
+150 ms, and `prefers-reduced-motion` turns all of it off. There are four pieces.
+The recording plays as a green duotone. The tear-off tabs on the install flyer
+come away when you copy from them, then grow back. The green plate drifts out of
+register as the packing list and the colophon scroll past; that one is
+scroll-driven CSS, so a browser without `animation-timeline` prints in register.
+The taped print lifts on hover.
 
 Fonts are self-hosted in `public/fonts` as latin subsets pulled from Google
-Fonts. The `↗` and `◂` marks are drawn as SVG because they fall outside that
-subset and would drop to a system face if they were typed.
+Fonts. Arrows are drawn as SVG (`Arrow.astro`, `ExternalArrow.astro`) because
+`→` and `↗` fall outside that subset and would drop to a system face if they
+were typed. Code blocks use Shiki's `css-variables` theme, inked in
+`global.css`.
 
 ## The generated docs pages
 
@@ -98,7 +113,7 @@ ffmpeg -ss 9 -i demo/bushel-demo.mp4 -frames:v 1 -q:v 4 \
 
 ## The social card
 
-`public/og.png` is a hand-rendered 1200×630 card, committed as an asset and
-redrawn by hand whenever the claim or the palette changes.
+`public/og.png` is a 1200×630 card exported from the pen.dev canvas. Redraw it
+there whenever the claim or the palette changes.
 
 Planned on the [bushel.sh wayfinder map](https://github.com/frankieramirez/bushel/issues/31).

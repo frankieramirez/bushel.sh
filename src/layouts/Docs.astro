@@ -73,10 +73,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
       <main id="main" class="docs-main">
         <header class="docs-head">
-          <p class="fig">
-            <span class="fig-no">Doc. {entry.no}</span>
-            <span class="fig-name">{entry.title}</span>
-          </p>
+          <p class="slug">Doc. {entry.no} · {entry.title}</p>
           <h1 class="docs-title">{title}</h1>
           {lede && <p class="docs-lede">{lede}</p>}
           <div class="rule"></div>
@@ -90,7 +87,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       {
         toc.length > 0 && (
           <aside class="docs-toc" aria-labelledby="toc-label">
-            <p class="stencil docs-nav-label" id="toc-label">
+            <p class="slug" id="toc-label">
               On this page
             </p>
             <ul>
@@ -111,7 +108,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 <script>
   /*
-   * A copy affordance on every fenced code block, in the same ink as the
+   * A copy affordance on every fenced code block, in the same red as the
    * landing page's command rows.
    *
    * The prose pages are Markdown, so they cannot reach for the `Command`
@@ -134,7 +131,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     const button = document.createElement("button");
     button.type = "button";
     button.className = "code-copy";
-    button.textContent = "COPY";
+    button.textContent = "Copy";
     button.setAttribute("aria-label", "Copy this code");
     wrap.appendChild(button);
 
@@ -148,12 +145,12 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       }
 
       button.dataset.copied = "true";
-      button.textContent = "COPIED";
+      button.textContent = "Copied";
 
       window.clearTimeout(timer);
       timer = window.setTimeout(() => {
         delete button.dataset.copied;
-        button.textContent = "COPY";
+        button.textContent = "Copy";
       }, RESET_MS);
     });
   });

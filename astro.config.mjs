@@ -31,8 +31,8 @@ export default defineConfig({
   trailingSlash: "never",
   markdown: {
     remarkPlugins: [docsLayout],
-    // bushel's own terminal palette is github-dark derived (src/ui/theme.rs),
-    // so code blocks and the recorded session agree without a custom theme.
-    shikiConfig: { theme: "github-dark" },
+    // Code prints on the green plate. The css-variables theme hands every token
+    // colour to global.css, which inks them paper-white and pale apple.
+    shikiConfig: { theme: "css-variables" },
   },
 });

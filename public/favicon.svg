@@ -1,14 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <rect width="200" height="200" fill="#123a24"/>
-  <g transform="translate(100 104) scale(1.06) translate(-100 -100)">
-    <path d="M104 40c-2-7 1-13 8-16 1 8-2 13-8 16z" fill="#7ee787"/>
-    <path d="M100 40v14" stroke="#7ee787" stroke-width="5" stroke-linecap="round"/>
-    <circle cx="70" cy="82" r="27" fill="#d93a2b"/>
-    <circle cx="130" cy="82" r="27" fill="#d93a2b"/>
-    <circle cx="100" cy="62" r="27" fill="#e8503f"/>
-    <rect x="24" y="96" width="152" height="18" fill="#f4ead6"/>
-    <path d="M32 118h136l-16 62H48l-16-62z" fill="#f4ead6"/>
-    <path d="M62 118l-8 62M100 118v62M138 118l8 62" stroke="#123a24" stroke-width="4"/>
-    <path d="M40 148h120" stroke="#123a24" stroke-width="4"/>
+  <rect width="200" height="200" rx="36" fill="#f4eddf"/>
+  <defs>
+    <clipPath id="apple-plate">
+      <path d="M100 66C116 52 152 50 168 78C184 106 178 148 151 171C136 184 117 185 100 177C83 185 64 184 49 171C22 148 16 106 32 78C48 50 84 52 100 66Z"/>
+    </clipPath>
+  </defs>
+  <!-- red plate: the fruit, with the paper showing through as a highlight -->
+  <path d="M100 66C116 52 152 50 168 78C184 106 178 148 151 171C136 184 117 185 100 177C83 185 64 184 49 171C22 148 16 106 32 78C48 50 84 52 100 66Z" fill="#e8483a"/>
+  <path d="M52 108C53 92 61 80 74 74" fill="none" stroke="#f4eddf" stroke-width="9" stroke-linecap="round"/>
+  <!-- green plate, a touch out of register: the stem and the leaf -->
+  <g transform="translate(3 -2)">
+    <path d="M101 70C101 56 104 42 111 30" fill="none" stroke="#2a7353" stroke-width="8" stroke-linecap="round"/>
+    <path d="M106 50C116 32 140 24 164 30C154 50 130 60 106 50Z" fill="#2a7353"/>
+  </g>
+  <!-- the green plate's shade, and the stem's foot, overprint the red -->
+  <g clip-path="url(#apple-plate)">
+    <g transform="translate(3 -2)">
+      <path d="M101 70C101 56 104 42 111 30" fill="none" stroke="#262013" stroke-width="8" stroke-linecap="round"/>
+      <path d="M172 98C175 134 162 161 139 176C125 184 111 183 99 177C127 170 151 155 161 131C166 120 170 109 172 98Z" fill="#262013"/>
+    </g>
   </g>
 </svg>
