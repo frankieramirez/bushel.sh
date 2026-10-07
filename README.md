@@ -32,21 +32,23 @@ into `sh` stays next to the archive it installs.
 
 ## The design
 
-The site is direction D, "One Bushel, Printed", from `design/bushel.pen`, a
-pen.dev file. That file is the source of visual truth, so take changes to the
-look there first. It's a two-ink risograph zine: fluorescent pink and medium
-blue on warm paper, overprinting to purple wherever they cross
-(`mix-blend-mode: multiply`). Big Shoulders carries the figures, Instrument Sans
-the reading, DM Mono the commands and the small print.
+The site is direction D, "One Bushel, Printed", in its Orchard inks, from
+`design/bushel.pen`, a pen.dev file. That file is the source of visual truth,
+so take changes to the look there first. It's a two-ink risograph zine: apple
+red and leaf green on warm paper, overprinting to a near-black brown wherever
+they cross (`mix-blend-mode: multiply`). Big Shoulders carries the figures,
+Instrument Sans the reading, DM Mono the commands and the small print.
 
-The fluorescent pink only clears 3:1 on the paper, so it's kept for large type.
-Small pink text uses the deeper `--pink-ink`. The basket print in `public/img/`
-was generated for the page, and the colophon says so.
+Apple red only clears 3:1 on the paper, so it's kept for large type and fills.
+Small red text uses the deeper `--apple-ink`, and small text on the green plate
+uses `--apple-pale`. The basket print in `public/img/` was generated for the
+page, then re-inked from the original pink and blue by separating the two ink
+layers, so its halftones survived. The colophon says it was generated.
 
 Motion follows bushel's own rules: nothing waits on it, no interaction runs past
 150 ms, and `prefers-reduced-motion` turns all of it off. There are four pieces.
-The recording plays as a blue duotone. The tear-off tabs on the install flyer
-come away when you copy from them, then grow back. The blue plate drifts out of
+The recording plays as a green duotone. The tear-off tabs on the install flyer
+come away when you copy from them, then grow back. The green plate drifts out of
 register as the packing list and the colophon scroll past; that one is
 scroll-driven CSS, so a browser without `animation-timeline` prints in register.
 The taped print lifts on hover.

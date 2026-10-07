@@ -31,8 +31,8 @@ export default defineConfig({
   trailingSlash: "never",
   markdown: {
     remarkPlugins: [docsLayout],
-    // Code prints on the blue plate. The css-variables theme hands every token
-    // colour to global.css, which inks them paper-white and pale pink.
+    // Code prints on the green plate. The css-variables theme hands every token
+    // colour to global.css, which inks them paper-white and pale apple.
     shikiConfig: { theme: "css-variables" },
   },
 });
